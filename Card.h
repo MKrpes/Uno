@@ -1,16 +1,17 @@
 #pragma once
 
-enum class CardColors
+enum CardColors
 {
-	Red, Yellow,Blue,Green,Black
+	Red,Yellow,Blue,Green,Dark
 };
-enum class CardTypes
+enum CardTypes
 {
-	N0,N1,N2,N3,N4,N5,N6,N7,N8,N9,Skip,Reverse,DrawTwo,ColorChange,DrawFour
+	ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,Skip,Reverse,DrawTwo,ColorChange,DrawFour
 };
 class Card
 {
 	Card() {
+
 	}
 };
 
