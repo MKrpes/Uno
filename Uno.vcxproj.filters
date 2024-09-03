@@ -15,22 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Uno.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Uno.h">
+    <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Card.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Deck.h">
+    <ClInclude Include="GameSettingsDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +44,16 @@
     <ClCompile Include="Uno.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Card.cpp">
+    <ClCompile Include="MainFrm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Deck.cpp">
+    <ClCompile Include="ChildView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSettingsDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,10 +63,12 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
+    <None Include="res\Uno.rc2">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Uno.ico">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Uno.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
