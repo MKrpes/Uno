@@ -25,8 +25,12 @@ protected:
 public:
 	afx_msg void OnLbnSelchangeList1();
 	CSliderCtrl PlayerCountSlider;
-	afx_msg void OnEnChangeEdit1();
 	CEdit PlayerCountEdit;
 	afx_msg void OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult);
 	CButton FullscreenCheck;
+	afx_msg void OnCbnSelchangeCombo1();
+	CComboBox VictoryConditionSelect;
+	CEdit VictoryConditionEdit;
+	afx_msg void OnEnChangeEdit2();
+	CStatic VictoryConditionText;
 };
