@@ -1,6 +1,7 @@
 #pragma once
 #include "afxdialogex.h"
 #include "Uno.h"
+#include "SavedGameSettings.h"
 #include<string>
 
 // GameSettings dialog
@@ -23,7 +24,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnLbnSelchangeList1();
 	CSliderCtrl PlayerCountSlider;
 	CEdit PlayerCountEdit;
 	afx_msg void OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult);
@@ -31,6 +31,8 @@ public:
 	afx_msg void OnCbnSelchangeCombo1();
 	CComboBox VictoryConditionSelect;
 	CEdit VictoryConditionEdit;
-	afx_msg void OnEnChangeEdit2();
 	CStatic VictoryConditionText;
+	afx_msg void OnBnClickedOk();
+	afx_msg void OnEnChangeEdit2();
+	SavedGameSettings settings;
 };
