@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Cards">
+      <UniqueIdentifier>{4f49bbb6-1ee0-4995-b1d8-b02f92d956d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Uno.h">
@@ -119,11 +122,170 @@
     <Image Include="res\Uno.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\UNO_red_zero.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\..\Users\Korisnik\Downloads\UNO-Back_1.png">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE0.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE1.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE3.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE5.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE6.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE7.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE8.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUE9.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUEDRAW2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUEREVERSE.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_BLUESTOP.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN0.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN1.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN3.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN5.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN6.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN7.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN8.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREEN9.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREENDRAW2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREENREVERSE.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_GREENSTOP.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED0.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED1.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED3.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED5.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED6.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED7.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED8.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_RED9.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_REDDRAW2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_REDREVERSE.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_REDSTOP.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARDCC.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARDD4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW0.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW1.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW3.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW5.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW6.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW7.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW8.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOW9.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOWDRAW2.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOWREVERSE.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_YELLOWSTOP.bmp">
+      <Filter>Resource Files\Cards</Filter>
     </Image>
   </ItemGroup>
 </Project>

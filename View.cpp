@@ -27,7 +27,7 @@ void View::OnInitialUpdate()
     CView::OnInitialUpdate();
 
     // Load the image from the resource using GDI+ Bitmap::FromResource
-    if (!LoadImagesFromResource(IDB_BITMAP2))
+    if (!LoadImagesFromResource(5000))
     {
         AfxMessageBox(_T("Failed to load the image resource"));
     }
@@ -48,7 +48,7 @@ BOOL View::LoadImagesFromResource(UINT nResourceID)
     //hand_bitmaps.clear();
 
     for (int i = 0; i < 10; ++i) {
-        hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(IDB_BITMAP2)));
+        hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(5000)));
     }
 
     // Redraw the view

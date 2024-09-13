@@ -2,7 +2,7 @@
 
 enum CardColors
 {
-	Red,Yellow,Green,Blue,Wildcard
+	Red=50,Yellow,Green,Blue,Wildcard
 };
 enum CardTypes
 {
