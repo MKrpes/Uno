@@ -9,6 +9,7 @@
 #include "Uno.h"
 #include "MainFrm.h"
 #include"GameSettingsDlg.h"
+#include"View.h"
 
 
 #ifdef _DEBUG
@@ -57,6 +58,8 @@ BOOL CUnoGameApp::InitInstance()
 
 	CWinApp::InitInstance();
 
+	GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
 	// Initialize OLE libraries
 	if (!AfxOleInit())
@@ -87,23 +90,46 @@ BOOL CUnoGameApp::InitInstance()
 
 	// create and load the frame with its resources
 
-	//CFrameWnd* pFrame = new CMainFrame;
-	//if (!pFrame)
-	//	return FALSE;
-	//m_pMainWnd = pFrame;
 
-	//pFrame->LoadFrame(IDR_MAINFRAME,
-	//	WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
-	//	nullptr);
 
-	GameSettings gameSettingsDlg;
-	m_pMainWnd = &gameSettingsDlg;
-	gameSettingsDlg.DoModal();
-	return FALSE;
+	GameSettings gameSettingsDlg(&gameSet,nullptr);
+	//m_pMainWnd = &gameSettingsDlg;
+	if(gameSettingsDlg.DoModal() == IDOK) {
 
+		CFrameWnd* pFrame = new CMainFrame;
+		if (!pFrame)
+			return FALSE;
+		m_pMainWnd = pFrame;
+
+		pFrame->LoadFrame(IDR_MAINFRAME,
+			WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
+			nullptr);
+		if (gameSet.isFullscreen) {
+			pFrame->ShowWindow(SW_SHOWMAXIMIZED);
+		}
+		else {
+			pFrame->ShowWindow(SW_SHOW);
+		}
+		pFrame->UpdateWindow();
+		return TRUE;
+
+	}
+	else {
+		return FALSE;
+	}
+	/*CFrameWnd* pFrame = new CMainFrame;
+	if (!pFrame)
+		return FALSE;
+	m_pMainWnd = pFrame;
+
+	pFrame->LoadFrame(IDR_MAINFRAME,
+		WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
+		nullptr);*/
 
 	// The one and only window has been initialized, so show and update it
+	// 
 	//pFrame->ShowWindow(SW_SHOW);
+	////pFrame->ShowWindow(SW_SHOWMAXIMIZED);
 	//pFrame->UpdateWindow();
 	//return TRUE;
 }
@@ -112,6 +138,7 @@ int CUnoGameApp::ExitInstance()
 {
 	//TODO: handle additional resources you may have added
 	AfxOleTerm(FALSE);
+	GdiplusShutdown(m_gdiplusToken);
 
 	return CWinApp::ExitInstance();
 }

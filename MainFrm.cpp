@@ -30,6 +30,7 @@ CMainFrame::CMainFrame() noexcept
 
 CMainFrame::~CMainFrame()
 {
+	m_wndView.~View();
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)

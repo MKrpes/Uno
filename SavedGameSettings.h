@@ -1,7 +1,8 @@
 #pragma once
-struct SavedGameSettings
+struct SavedGameSettings 
 {
-	int playerCount;
+public:
+	int playerCount=2;
 	bool isFullscreen = false;
 	int GameType = 0;
 	int winsNeeded = 5;

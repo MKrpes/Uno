@@ -8,6 +8,11 @@
 #endif
 
 #include "resource.h"       // main symbols
+#include"SavedGameSettings.h"
+#include <gdiplus.h>
+using namespace Gdiplus;
+
+
 
 
 // CUnoGameApp:
@@ -18,7 +23,8 @@ class CUnoGameApp : public CWinApp
 {
 public:
 	CUnoGameApp() noexcept;
-
+	ULONG_PTR m_gdiplusToken;
+	SavedGameSettings gameSet;
 
 // Overrides
 public:

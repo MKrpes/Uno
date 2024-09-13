@@ -1,0 +1,42 @@
+#pragma once
+#include <afxwin.h>
+#include <gdiplus.h>
+#include<vector>
+#include"Uno.h"
+
+
+class View :
+    public CView
+{
+    public:
+        virtual void OnDraw(CDC* pDC);  // Override to perform drawing
+        View() {};
+        ~View();
+        DECLARE_DYNCREATE(View)
+        afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+        CButton DrawButton;
+        CButton UnoButton;
+        afx_msg void OnDrawButtonClick();
+        afx_msg void OnUnoButtonClick();
+        std::vector<Gdiplus::Bitmap*> hand_bitmaps;
+        void OnInitialUpdate();
+        std::vector<CRect> m_imageRects;          // Store the position and size of each image
+        int m_hoveredImageIndex = -1;
+
+        CRect handCards;
+        CRect previewCard;
+        CRect deck;
+        CRect playedCards;
+
+        BOOL LoadImagesFromResource(UINT nResourceID);
+        afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+        afx_msg void OnMouseMove(UINT nFlags, CPoint point);    // Handle mouse hover
+        void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage);
+        DECLARE_MESSAGE_MAP()
+
+        void ShowPlayedCard(CDC* pDC, Gdiplus::Bitmap* pImage) const;
+        void GetPreviewRect(CRect& previewRect) const;
+        BOOL OnEraseBkgnd(CDC* pDC);
+
+};
+

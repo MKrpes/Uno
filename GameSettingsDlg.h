@@ -11,7 +11,7 @@ class GameSettings : public CDialogEx
 	DECLARE_DYNAMIC(GameSettings)
 
 public:
-	GameSettings(CWnd* pParent = nullptr);   // standard constructor
+	GameSettings(SavedGameSettings* gmSet, CWnd* pParent = nullptr);   // standard constructor
 	virtual ~GameSettings();
 
 // Dialog Data
@@ -33,6 +33,5 @@ public:
 	CEdit VictoryConditionEdit;
 	CStatic VictoryConditionText;
 	afx_msg void OnBnClickedOk();
-	afx_msg void OnEnChangeEdit2();
-	SavedGameSettings settings;
+	SavedGameSettings* settings;
 };

@@ -9,10 +9,17 @@
 
 IMPLEMENT_DYNAMIC(GameSettings, CDialogEx)
 
-GameSettings::GameSettings(CWnd* pParent /*=nullptr*/)
+
+GameSettings::GameSettings(SavedGameSettings* gmSet, CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG1, pParent)
 {
+	settings = gmSet;
 }
+//
+//GameSettings::GameSettings(SavedGameSettings& gameSet)
+//{
+//	gmSet = gameSet;
+//}
 
 GameSettings::~GameSettings()
 {
@@ -35,7 +42,6 @@ void GameSettings::DoDataExchange(CDataExchange* pDX)
 	VictoryConditionSelect.SelectString(0, "None");
 
 	DDX_Control(pDX, IDC_EDIT2, VictoryConditionEdit);
-
 	DDX_Control(pDX, IDC_STATIC3, VictoryConditionText);
 }
 
@@ -44,7 +50,6 @@ BEGIN_MESSAGE_MAP(GameSettings, CDialogEx)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER1, &GameSettings::OnNMCustomdrawSlider1)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &GameSettings::OnCbnSelchangeCombo1)
 	ON_BN_CLICKED(IDOK, &GameSettings::OnBnClickedOk)
-	ON_EN_CHANGE(IDC_EDIT2, &GameSettings::OnEnChangeEdit2)
 END_MESSAGE_MAP()
 
 
@@ -86,36 +91,24 @@ void GameSettings::OnCbnSelchangeCombo1()
 
 void GameSettings::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
-	CDialogEx::OnOK();
-}
-
-
-void GameSettings::OnEnChangeEdit2()
-{
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
-
-	settings.playerCount = PlayerCountSlider.GetPos();
+	settings->playerCount = PlayerCountSlider.GetPos();
 	if (FullscreenCheck.GetCheck()) {
-		settings.isFullscreen = true;
+		settings->isFullscreen = true;
 	}
 	UINT gameCondition = VictoryConditionEdit.GetDlgItemInt(IDD_DIALOG1);
 	switch (VictoryConditionSelect.GetCurSel()) {
 	case 0:
-		settings.GameType = 0;
+		settings->GameType = 0;
 		break;
 	case 1:
-		settings.GameType = 1;
-		if (gameCondition != 0) settings.winsNeeded = gameCondition;
+		settings->GameType = 1;
+		if (gameCondition != 0) settings->winsNeeded = gameCondition;
 		break;
 	case 2:
-		settings.GameType = 2;
-		if (gameCondition != 0) settings.pointsNeeded = gameCondition;
+		settings->GameType = 2;
+		if (gameCondition != 0) settings->pointsNeeded = gameCondition;
 		break;
 	}
+
+	CDialogEx::OnOK();
 }
