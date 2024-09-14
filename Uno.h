@@ -10,6 +10,7 @@
 #include "resource.h"       // main symbols
 #include"SavedGameSettings.h"
 #include <gdiplus.h>
+#include"Game.h"
 using namespace Gdiplus;
 
 
@@ -25,6 +26,7 @@ public:
 	CUnoGameApp() noexcept;
 	ULONG_PTR m_gdiplusToken;
 	SavedGameSettings gameSet;
+	//Game game;
 
 // Overrides
 public:

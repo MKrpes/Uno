@@ -93,14 +93,14 @@ BOOL CUnoGameApp::InitInstance()
 
 
 	GameSettings gameSettingsDlg(&gameSet,nullptr);
-	//m_pMainWnd = &gameSettingsDlg;
 	if(gameSettingsDlg.DoModal() == IDOK) {
-
-		CFrameWnd* pFrame = new CMainFrame;
+		Game* game=new Game(gameSet);
+		//CFrameWnd* pFrame = new CMainFrame;
+		CMainFrame* pFrame = new CMainFrame;
 		if (!pFrame)
 			return FALSE;
 		m_pMainWnd = pFrame;
-
+		pFrame->m_wndView.loadGame(game);
 		pFrame->LoadFrame(IDR_MAINFRAME,
 			WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
 			nullptr);
@@ -117,21 +117,6 @@ BOOL CUnoGameApp::InitInstance()
 	else {
 		return FALSE;
 	}
-	/*CFrameWnd* pFrame = new CMainFrame;
-	if (!pFrame)
-		return FALSE;
-	m_pMainWnd = pFrame;
-
-	pFrame->LoadFrame(IDR_MAINFRAME,
-		WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
-		nullptr);*/
-
-	// The one and only window has been initialized, so show and update it
-	// 
-	//pFrame->ShowWindow(SW_SHOW);
-	////pFrame->ShowWindow(SW_SHOWMAXIMIZED);
-	//pFrame->UpdateWindow();
-	//return TRUE;
 }
 
 int CUnoGameApp::ExitInstance()

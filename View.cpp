@@ -22,12 +22,13 @@ View::~View()
     }
 }
 
+
 void View::OnInitialUpdate()
 {
     CView::OnInitialUpdate();
 
     // Load the image from the resource using GDI+ Bitmap::FromResource
-    if (!LoadImagesFromResource(5000))
+    if (!LoadImagesFromResource())
     {
         AfxMessageBox(_T("Failed to load the image resource"));
     }
@@ -37,7 +38,7 @@ void View::OnInitialUpdate()
 }
 
 
-BOOL View::LoadImagesFromResource(UINT nResourceID)
+BOOL View::LoadImagesFromResource()
 {
     HMODULE hModule = AfxGetInstanceHandle();
     // Clear existing images
@@ -45,10 +46,12 @@ BOOL View::LoadImagesFromResource(UINT nResourceID)
     {
         delete img;
     }
-    //hand_bitmaps.clear();
+    hand_bitmaps.clear();
 
-    for (int i = 0; i < 10; ++i) {
-        hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(5000)));
+
+
+    for (Card card : game->getPlayerhand()) {
+        hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.Color*100+card.Type)));
     }
 
     // Redraw the view
@@ -150,7 +153,9 @@ void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)
     }
 }
 
-void View::ShowPlayedCard(CDC* pDC, Gdiplus::Bitmap* pImage) const {
+void View::ShowPlayedCard(CDC* pDC, const Card card) const {
+    HMODULE hModule = AfxGetInstanceHandle();
+    Gdiplus::Bitmap* pImage = Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.Color * 100 + card.Type));
 
     if (pImage)
     {
@@ -167,6 +172,11 @@ void View::ShowPlayedCard(CDC* pDC, Gdiplus::Bitmap* pImage) const {
 
         graphics.DrawImage(pImage, xOffset, yOffset, previewWidth, previewHeight);
     }
+}
+
+void View::loadGame(Game* gm)
+{
+    game = gm;
 }
 
 void View::OnDraw(CDC* pDC)
@@ -207,7 +217,7 @@ void View::OnDraw(CDC* pDC)
         int xOffset = 0;  // Horizontal position to start drawing
         int imageWidth = clientRect.Width() / 10;
         // Draw images side by side, with their actual sizes
-        for (int i = 0; i < 10/*hand_bitmaps.size()*/; ++i)
+        for (int i = 0; i <hand_bitmaps.size(); ++i)
         {
             Gdiplus::Bitmap* pImage = hand_bitmaps[i];
             if (pImage)
@@ -220,7 +230,7 @@ void View::OnDraw(CDC* pDC)
 
                 // Draw the image at the bottom
                 graphics.DrawImage(pImage, xOffset, yOffset, imageWidth, imageHeight);
-                ShowPlayedCard(&memoryDC, pImage);  //!!!!!!!!TEST!!!!!!!TEST!!!!!!!!!!!!!!!TESTTEST
+                 //!!!!!!!!TEST!!!!!!!TEST!!!!!!!!!!!!!!!TESTTEST
                 // Store the image's position (for click and hover detection)
                 //CRect imageRect(xOffset, yOffset - imageHeight, xOffset + imageWidth, yOffset);
                 CRect imageRect(xOffset, yOffset, xOffset + imageWidth, clientRect.bottom);
@@ -230,7 +240,7 @@ void View::OnDraw(CDC* pDC)
                 xOffset += imageWidth;  // Add some padding between images
             }
         }
-
+        ShowPlayedCard(&memoryDC, game->playedCards->getLast());
         // If an image is being hovered, display a larger preview
         if (m_hoveredImageIndex >= 0 && m_hoveredImageIndex < hand_bitmaps.size())
         {

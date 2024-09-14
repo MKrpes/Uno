@@ -193,6 +193,7 @@
     <ClInclude Include="ChooseColorDlg.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameSettingsDlg.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="MainFrm.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SavedGameSettings.h" />
+    <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Uno.h" />
     <ClInclude Include="View.h" />
@@ -210,6 +212,7 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="ChooseColorDlg.cpp" />
     <ClCompile Include="Deck.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameSettingsDlg.cpp" />
     <ClCompile Include="Hand.cpp" />
     <ClCompile Include="MainFrm.cpp" />
@@ -222,6 +225,7 @@
     <ClCompile Include="PlayedCards.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SavedGameSettings.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="Uno.cpp" />
     <ClCompile Include="View.cpp" />
   </ItemGroup>

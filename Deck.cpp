@@ -6,21 +6,21 @@ Deck::Deck(const Deck& other) : deck(other.deck) {}
 
 Deck::Deck() {
 	//generates cards that appear only once (number 0 cards)
-	for(int i = 0; i < 4; i++) {
+	for(int i = 50; i < 54; ++i) {
 			deck.push_back(Card((CardColors)i, (CardTypes)0));
 	}
 	//generates cards that appear twice (numbers, skip, reverse and draw two)
-	for (int n = 0; n < 2; n++) {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 1; j < 13; j++) {
+	for (int n = 0; n < 2; ++n) {
+		for (int i = 50; i < 54; ++i) {
+			for (int j = 1; j < 13; ++j) {
 				deck.push_back(Card((CardColors)i, (CardTypes)j));
 			}
 		}
 	}
 	//generates wildcards (4 of color change and draw four each)
-	for (int n = 0; n < 4; n++) {
-		for (int i = 13; i < 15; i++) {
-			deck.push_back(Card((CardColors)4, (CardTypes)i));
+	for (int n = 0; n < 4; ++n) {
+		for (int i = 13; i < 15; ++i) {
+			deck.push_back(Card((CardColors)54, (CardTypes)i));
 		}
 	}
 	Shuffle();

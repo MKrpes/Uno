@@ -1,13 +1,19 @@
+#include "pch.h"
 #include "Game.h"
 
-Game::Game(uint32_t n) {
-	playerCount = n;
+Game::Game(SavedGameSettings& gameSet) {
+	playerCount = gameSet.playerCount;
 	deck = new Deck();
 	playedCards = new PlayedCards(deck->PopTopCard());
 	players.push_back(std::make_unique<Player>(deck->GetStartingHand()));
-	for (uint32_t i=0; i < n; ++i) {
+	for (uint32_t i=1; i < playerCount; ++i) {
 		players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
 	}
+}
+
+std::vector<Card> Game::getPlayerhand()
+{
+	return players[0]->playerHand->hand;
 }
 
 void Game::nextPlayer() {
@@ -32,12 +38,12 @@ void Game::processMove(Card card) {
 			break;
 		}
 		case 13: {
-			colorChange();
+			colorChange(card);
 			break;
 		}
 		case 14: {
 			drawSum += 4;
-			colorChange();
+			colorChange(card);
 			break;
 		}
 		}
@@ -53,6 +59,6 @@ bool Game::checkIfVaildMove(Card card) {
 	return false;
 }
 
-int Game::colorChange() { //!!!!!!!!
-	return 0;
+void Game::colorChange(Card card) { //!!!!!!!!
+	 
 }

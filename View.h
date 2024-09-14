@@ -3,12 +3,16 @@
 #include <gdiplus.h>
 #include<vector>
 #include"Uno.h"
+#include"Game.h"
+#include"Card.h"
 
 
 class View :
     public CView
 {
     public:
+        Game* game;
+        void loadGame(Game* gm);
         virtual void OnDraw(CDC* pDC);  // Override to perform drawing
         View() {};
         ~View();
@@ -28,13 +32,13 @@ class View :
         CRect deck;
         CRect playedCards;
 
-        BOOL LoadImagesFromResource(UINT nResourceID);
+        BOOL LoadImagesFromResource();
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
         afx_msg void OnMouseMove(UINT nFlags, CPoint point);    // Handle mouse hover
         void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage);
         DECLARE_MESSAGE_MAP()
 
-        void ShowPlayedCard(CDC* pDC, Gdiplus::Bitmap* pImage) const;
+        void ShowPlayedCard(CDC* pDC, const Card card) const;
         void GetPreviewRect(CRect& previewRect) const;
         BOOL OnEraseBkgnd(CDC* pDC);
 

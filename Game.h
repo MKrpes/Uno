@@ -5,7 +5,9 @@
 #include"Deck.h"
 #include"PlayedCards.h"
 #include"Bot.h"
-
+#include"SavedGameSettings.h"
+#include"Scoreboard.h"
+#include"Card.h"
 
 class Game
 {
@@ -17,18 +19,19 @@ public:
 	uint32_t drawSum=0;
 
 
-
+	//Scoreboard scBoard;
 	Deck* deck;
 	PlayedCards* playedCards;
 	
 	~Game();
 	
+	std::vector<Card> getPlayerhand();
 	void nextPlayer();
 	void turn();
 	void processMove(Card card);
 	bool checkIfVaildMove(Card card);
-	int colorChange();
+	void colorChange(Card card);
 public:
-	Game(uint32_t i);
+	Game(SavedGameSettings& gameSet);
 };
 

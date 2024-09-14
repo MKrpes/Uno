@@ -33,7 +33,6 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	//CChildView    m_wndView;
 	View m_wndView;
 
 // Generated message map functions
