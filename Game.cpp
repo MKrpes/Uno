@@ -11,7 +11,7 @@ Game::Game(SavedGameSettings& gameSet) {
 	}
 }
 
-std::vector<Card> Game::getPlayerhand()
+std::vector<Card>& Game::getPlayerhand()
 {
 	return players[0]->playerHand->hand;
 }
@@ -22,13 +22,27 @@ void Game::nextPlayer() {
 	if (currentPlayer < 0) { currentPlayer = playerCount - 1; return;}
 }
 
-bool Game::Playerturn(int i)
+int Game::validatePlayerMove(int i)
 {
-	bool hasDrawn = false;
-	if (checkIfValidMove(players[0]->playerHand->hand[i])) {
 
+	if (checkIfValidMove(getPlayerhand()[i])) {
+		if (getPlayerhand()[i].getColor() == Wildcard) {
+			return 1; //requires chooseColorDlg to run
+		}
+		return 0; //normal valid move
 	}
-	return false;
+	else return -1; //invalid move
+	
+}
+
+void Game::PlayerMove(int i, int color)
+{
+	players[0]->hasDrawn = false;
+if (getPlayerhand()[i].getColor() == Wildcard) {
+		getPlayerhand()[i].Color = (CardColors)color;
+	}
+	playedCards->playerTurn(getPlayerhand()[i]);
+	getPlayerhand().erase(getPlayerhand().begin()+i);
 }
 
 void Game::processMove(Card card) {
@@ -59,10 +73,10 @@ void Game::processMove(Card card) {
 	}
 }
 
-bool Game::checkIfValidMove(Card card) {
+bool Game::checkIfValidMove(Card card) const{
 	if (playedCards->getLast().Color == card.getColor() ||
 		playedCards->getLast().Type == card.getType() ||
-		card.getColor() == 4) {
+		card.getColor() == Wildcard) {
 		return true;
 	}
 	return false;
@@ -76,5 +90,8 @@ void Game::colorChange(Card card) { //!!!!!!!!
 
 void Game::DrawCard()
 {
-	players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
+	if (!players[currentPlayer]->hasDrawn) {
+		players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
+		players[currentPlayer]->hasDrawn = true;
+	}
 }

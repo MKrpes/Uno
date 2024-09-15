@@ -25,11 +25,12 @@ public:
 	
 	~Game();
 	
-	std::vector<Card> getPlayerhand();
+	std::vector<Card>& getPlayerhand();
 	void nextPlayer();
-	bool Playerturn(int i);
+	int validatePlayerMove(int i);
+	void PlayerMove(int i,int color=0);
 	void processMove(Card card);
-	bool checkIfValidMove(Card card);
+	bool checkIfValidMove(Card card) const;
 	void colorChange(Card card);
 	void DrawCard();
 	Game(SavedGameSettings& gameSet);

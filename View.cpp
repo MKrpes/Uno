@@ -123,16 +123,21 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 }
 void View::OnDrawButtonClick()
 {
-    if(game->currentPlayer == 0)
+    if(game->currentPlayer == 0 && !game->players[0]->hasDrawn)
     {
         game->DrawCard();
+        game->players[0]->hasDrawn = true;
+
         Invalidate();
     }
 }
 
 void View::OnUnoButtonClick()
 {
-    AfxMessageBox(_T("Uno Button clicked!")); //TODO
+    if (game->currentPlayer == 0 && !game->players[0]->hasDrawn)
+    {
+        game->validatePlayerTurn(250);
+    }
 }
 
 afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -142,7 +147,25 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
         m_hoveredImageIndex < hand_bitmaps.size() &&
         game->currentPlayer == 0)
     {
-        
+        switch (game->validatePlayerMove(m_hoveredImageIndex)) {
+        case -1:{
+            break;
+        }
+        case 0: {
+            game->PlayerMove(m_hoveredImageIndex);
+            Invalidate();
+            break;
+        }
+        case 1: {
+            ChooseColorDlg chooseDlg;
+            if (chooseDlg.DoModal() == IDOK) {
+                int color = chooseDlg.getChosenColor();
+                game->PlayerMove(m_hoveredImageIndex,color);
+                Invalidate();
+            }
+            break;
+        }
+        }
     }
 }
 
@@ -197,7 +220,6 @@ void View::OnDraw(CDC* pDC)
 
     // Use GDI+ to draw into the memory DC
     Graphics graphics(memoryDC.GetSafeHdc());
-
     if (!hand_bitmaps.empty())
     {
         ShowHand(&memoryDC);

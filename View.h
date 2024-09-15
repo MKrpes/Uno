@@ -5,6 +5,7 @@
 #include"Uno.h"
 #include"Game.h"
 #include"Card.h"
+#include"ChooseColorDlg.h"
 
 
 class View :

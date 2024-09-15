@@ -11,6 +11,7 @@ class ChooseColorDlg : public CDialogEx
 public:
 	ChooseColorDlg(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~ChooseColorDlg();
+	int getChosenColor() const { return chosenColor; }
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -19,7 +20,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
+	int chosenColor;
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();

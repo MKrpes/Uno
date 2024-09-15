@@ -278,6 +278,14 @@
     <Image Include="res\Cards\UNO_REDSTOP.bmp" />
     <Image Include="res\Cards\UNO_WILDCARDCC.bmp" />
     <Image Include="res\Cards\UNO_WILDCARDD4.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_BLUE_CC.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_BLUE_D4.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_GREEN_CC.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_GREEN_D4.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_RED_CC.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_RED_D4.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_YELLOW_CC.bmp" />
+    <Image Include="res\Cards\UNO_WILDCARD_YELLOW_D4.bmp" />
     <Image Include="res\Cards\UNO_YELLOW0.bmp" />
     <Image Include="res\Cards\UNO_YELLOW1.bmp" />
     <Image Include="res\Cards\UNO_YELLOW2.bmp" />

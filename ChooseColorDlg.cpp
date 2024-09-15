@@ -28,10 +28,10 @@ void ChooseColorDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(ChooseColorDlg, CDialogEx)
-	ON_BN_CLICKED(IDC_BUTTON1, &ChooseColorDlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDC_BUTTON2, &ChooseColorDlg::OnBnClickedButton2)
-	ON_BN_CLICKED(IDC_BUTTON3, &ChooseColorDlg::OnBnClickedButton3)
-	ON_BN_CLICKED(IDC_BUTTON4, &ChooseColorDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_RED, &ChooseColorDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_YELLOW, &ChooseColorDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_GREEN, &ChooseColorDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BLUE, &ChooseColorDlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -40,23 +40,27 @@ END_MESSAGE_MAP()
 
 void ChooseColorDlg::OnBnClickedButton1()
 {
-	// TODO: Add your control notification handler code here
+	chosenColor = IDC_RED;
+	this->EndDialog(IDOK);
 }
 
 
 void ChooseColorDlg::OnBnClickedButton2()
 {
-	// TODO: Add your control notification handler code here
+	chosenColor = IDC_YELLOW;
+	this->EndDialog(IDOK);
 }
 
 
 void ChooseColorDlg::OnBnClickedButton3()
 {
-	// TODO: Add your control notification handler code here
+	chosenColor = IDC_GREEN;
+	this->EndDialog(IDOK);
 }
 
 
 void ChooseColorDlg::OnBnClickedButton4()
 {
-	// TODO: Add your control notification handler code here
+	chosenColor = IDC_BLUE;
+	this->EndDialog(IDOK);
 }

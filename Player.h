@@ -8,5 +8,6 @@ public:
 	Player(const std::vector<Card> cards);
 	//~Player();
 	Card PlayerTurn(int i);
+	bool hasDrawn = false;
 };
 

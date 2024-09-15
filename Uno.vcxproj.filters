@@ -299,5 +299,29 @@
     <Image Include="res\Cards\UNO_YELLOWSTOP.bmp">
       <Filter>Resource Files\Cards</Filter>
     </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_BLUE_CC.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_BLUE_D4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_GREEN_CC.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_GREEN_D4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_RED_CC.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_RED_D4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_YELLOW_CC.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
+    <Image Include="res\Cards\UNO_WILDCARD_YELLOW_D4.bmp">
+      <Filter>Resource Files\Cards</Filter>
+    </Image>
   </ItemGroup>
 </Project>
