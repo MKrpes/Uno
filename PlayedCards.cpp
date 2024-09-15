@@ -11,3 +11,4 @@ void PlayedCards::playerTurn(const Card card) {
 const Card PlayedCards::getLast() {
 	return cardHistory.back();
 }
+

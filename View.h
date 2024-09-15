@@ -27,10 +27,7 @@ class View :
         std::vector<CRect> m_imageRects;          // Store the position and size of each image
         int m_hoveredImageIndex = -1;
 
-        CRect handCards;
-        CRect previewCard;
-        CRect deck;
-        CRect playedCards;
+
 
         BOOL LoadImagesFromResource();
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
@@ -38,8 +35,12 @@ class View :
         void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage);
         DECLARE_MESSAGE_MAP()
 
+        
         void ShowPlayedCard(CDC* pDC, const Card card) const;
         void GetPreviewRect(CRect& previewRect) const;
+        
+        void ShowHand(CDC* pDC);
+        void GetHandRect(CRect& previewRect) const;
         BOOL OnEraseBkgnd(CDC* pDC);
 
 };

@@ -22,8 +22,17 @@ void Game::nextPlayer() {
 	if (currentPlayer < 0) { currentPlayer = playerCount - 1; return;}
 }
 
+bool Game::Playerturn(int i)
+{
+	bool hasDrawn = false;
+	if (checkIfValidMove(players[0]->playerHand->hand[i])) {
+
+	}
+	return false;
+}
+
 void Game::processMove(Card card) {
-	if (checkIfVaildMove(card)) {
+	if (checkIfValidMove(card)) {
 		switch (card.getType()) {
 		case 10: {
 			nextPlayer();
@@ -50,7 +59,7 @@ void Game::processMove(Card card) {
 	}
 }
 
-bool Game::checkIfVaildMove(Card card) {
+bool Game::checkIfValidMove(Card card) {
 	if (playedCards->getLast().Color == card.getColor() ||
 		playedCards->getLast().Type == card.getType() ||
 		card.getColor() == 4) {
@@ -59,6 +68,13 @@ bool Game::checkIfVaildMove(Card card) {
 	return false;
 }
 
+
+
 void Game::colorChange(Card card) { //!!!!!!!!
 	 
+}
+
+void Game::DrawCard()
+{
+	players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
 }

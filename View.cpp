@@ -55,32 +55,34 @@ BOOL View::LoadImagesFromResource()
     }
 
     // Redraw the view
-    Invalidate();
     return TRUE;
 }
 
-void View::OnMouseMove(UINT nFlags, CPoint point)
+void View::OnMouseMove(UINT nFlags, CPoint point) 
 {
     bool hoverChanged = false;
-
+    CRect hand;
+    GetHandRect(hand);
     // Check if the mouse is hovering over an image
-    for (int i = 0; i < m_imageRects.size(); ++i)
-    {
-        if (m_imageRects[i].PtInRect(point)) //moguce puno bolje
+    if (hand.PtInRect(point)) {
+        for (int i = 0; i < m_imageRects.size(); ++i)
         {
-            // If the hovered image changed, update it
-            if (m_hoveredImageIndex != i)
+            if (m_imageRects[i].PtInRect(point)) //moguce puno bolje
             {
-                hoverChanged = true;
+                // If the hovered image changed, update it
+                if (m_hoveredImageIndex != i)
+                {
+                    hoverChanged = true;
 
-                // Invalidate the preview area for redrawing
-                CRect previewRect;
-                GetPreviewRect(previewRect);
-                InvalidateRect(previewRect, FALSE);  // Redraw only the preview area
+                    // Invalidate the preview area for redrawing
+                    CRect previewRect;
+                    GetPreviewRect(previewRect);
+                    InvalidateRect(previewRect, FALSE);  // Redraw only the preview area
 
-                m_hoveredImageIndex = i;
+                    m_hoveredImageIndex = i;
+                }
+                break;
             }
-            break;
         }
     }
 
@@ -121,37 +123,32 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 }
 void View::OnDrawButtonClick()
 {
-    AfxMessageBox(_T("Button clicked!")); //TODO!!!!!!!!!!!!!!!
+    if(game->currentPlayer == 0)
+    {
+        game->DrawCard();
+        Invalidate();
+    }
 }
+
 void View::OnUnoButtonClick()
 {
     AfxMessageBox(_T("Uno Button clicked!")); //TODO
 }
 
 afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
+   
 
-}
-
-void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)
-{
-    if (pImage)
+    if (m_hoveredImageIndex > -1 &&
+        m_hoveredImageIndex < hand_bitmaps.size() &&
+        game->currentPlayer == 0)
     {
-        Graphics graphics(pDC->GetSafeHdc());
-
-        // Define the preview area (for example, top of the client area)
-        CRect clientRect;
-        GetPreviewRect(clientRect);
-
-        int previewWidth = clientRect.Width();  //!!!test!!! change later
-        int previewHeight = clientRect.Height();  
-
-        int xOffset = clientRect.right - previewWidth - 20;  // Right side of the window
-        int yOffset = 20;  // Top of the window
-
-        // Draw the enlarged preview of the hovered image
-        graphics.DrawImage(pImage, xOffset, yOffset, previewWidth, previewHeight);
+        
     }
 }
+
+
+
+
 
 void View::ShowPlayedCard(CDC* pDC, const Card card) const {
     HMODULE hModule = AfxGetInstanceHandle();
@@ -164,7 +161,7 @@ void View::ShowPlayedCard(CDC* pDC, const Card card) const {
         CRect clientRect;
         GetClientRect(&clientRect);
 
-        int previewWidth = 50;   //!!!test!!! change later
+        int previewWidth = 100;   //!!!test!!! change later
         int previewHeight = 200;  
 
         int xOffset = clientRect.right / 2 - previewWidth;  //!!!test!!! change later
@@ -201,45 +198,9 @@ void View::OnDraw(CDC* pDC)
     // Use GDI+ to draw into the memory DC
     Graphics graphics(memoryDC.GetSafeHdc());
 
-
     if (!hand_bitmaps.empty())
     {
-        //CRect clientRect;
-        //GetClientRect(&clientRect);
-
-        // Calculate available area for the images
-        int imageHeight = 200;
-
-        int yOffset = clientRect.bottom - imageHeight; // Leave space for image row
-
-        m_imageRects.clear();  // Clear previous rects
-
-        int xOffset = 0;  // Horizontal position to start drawing
-        int imageWidth = clientRect.Width() / 10;
-        // Draw images side by side, with their actual sizes
-        for (int i = 0; i <hand_bitmaps.size(); ++i)
-        {
-            Gdiplus::Bitmap* pImage = hand_bitmaps[i];
-            if (pImage)
-            {
-                //int imageWidth = pImage->GetWidth();   // Use actual image width
-                //int imageHeight = pImage->GetHeight(); // Use actual image height
-
-                // Make sure images don't overlap
-                if (i * imageWidth > clientRect.Width()) break;
-
-                // Draw the image at the bottom
-                graphics.DrawImage(pImage, xOffset, yOffset, imageWidth, imageHeight);
-                 //!!!!!!!!TEST!!!!!!!TEST!!!!!!!!!!!!!!!TESTTEST
-                // Store the image's position (for click and hover detection)
-                //CRect imageRect(xOffset, yOffset - imageHeight, xOffset + imageWidth, yOffset);
-                CRect imageRect(xOffset, yOffset, xOffset + imageWidth, clientRect.bottom);
-                m_imageRects.push_back(imageRect);
-
-                // Increment the horizontal offset for the next image
-                xOffset += imageWidth;  // Add some padding between images
-            }
-        }
+        ShowHand(&memoryDC);
         ShowPlayedCard(&memoryDC, game->playedCards->getLast());
         // If an image is being hovered, display a larger preview
         if (m_hoveredImageIndex >= 0 && m_hoveredImageIndex < hand_bitmaps.size())
@@ -251,6 +212,28 @@ void View::OnDraw(CDC* pDC)
 
     // Cleanup: Select the old bitmap back into the memory DC and delete the objects
     memoryDC.SelectObject(pOldBitmap);
+}
+
+
+void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)
+{
+    if (pImage)
+    {
+        Graphics graphics(pDC->GetSafeHdc());
+
+        // Define the preview area (for example, top of the client area)
+        CRect clientRect;
+        GetPreviewRect(clientRect);
+
+        int previewWidth = clientRect.Width();  //!!!test!!! change later
+        int previewHeight = clientRect.Height();
+
+        int xOffset = clientRect.right - previewWidth - 20;  // Right side of the window
+        int yOffset = 20;  // Top of the window
+
+        // Draw the enlarged preview of the hovered image
+        graphics.DrawImage(pImage, xOffset, yOffset, previewWidth, previewHeight);
+    }
 }
 
 void View::GetPreviewRect(CRect& previewRect) const
@@ -267,6 +250,86 @@ void View::GetPreviewRect(CRect& previewRect) const
 
     // Set the calculated preview rectangle
     previewRect = CRect(xOffset, yOffset, xOffset + previewWidth, yOffset + previewHeight);
+}
+
+void View::ShowHand(CDC* pDC)
+{
+    if (!game->getPlayerhand().empty())
+    {
+        LoadImagesFromResource();
+        std::vector<uint32_t> cardsToEnlarge =
+            game->players[0]->playerHand->CheckForAvailableCards(game->playedCards->getLast());
+
+        m_imageRects.clear();
+
+        Graphics graphics(pDC->GetSafeHdc());
+
+        // Define the preview area (for example, top of the client area)
+        CRect clientRect;
+        GetHandRect(clientRect);
+
+        int xOffset = 0;  // Horizontal position to start drawing
+        //int imageWidth = clientRect.Width() / hand_bitmaps.size();
+        //int imageHeight = clientRect.Height() / 2;
+        int enCount = cardsToEnlarge.size();
+        for (int i = 0; i < hand_bitmaps.size(); ++i)
+        {
+            int imageWidth = clientRect.Width() / (hand_bitmaps.size()-cardsToEnlarge.size()+2*cardsToEnlarge.size());
+            int imageHeight = clientRect.Height();
+            Gdiplus::Bitmap* pImage = hand_bitmaps[i];
+            if (pImage)
+            {
+                imageHeight*=0.5; 
+
+                // Make sure images don't overlap
+                //if (i * imageWidth > clientRect.Width()) break;
+
+                for (uint32_t j : cardsToEnlarge)
+                {
+                    if (j == i) {
+                        imageWidth *= 2;
+                        imageHeight=clientRect.Height();
+                        break;
+                    }
+                }
+                if (pImage->GetWidth() < imageWidth) { //prevents cards from taking the entire screen
+                    imageWidth = pImage->GetWidth();
+                }
+                int yOffset = clientRect.bottom - imageHeight; // Leave space for image row
+
+                // Draw the image at the bottom
+                graphics.DrawImage(pImage, xOffset, yOffset, imageWidth, imageHeight);
+               // Store the image's position (for click and hover detection)
+                CRect imageRect(xOffset, yOffset, xOffset + imageWidth, clientRect.bottom);
+                m_imageRects.push_back(imageRect);
+
+                // Increment the horizontal offset for the next image
+                xOffset += imageWidth;  // Add some padding between images
+            }
+            int previewWidth = clientRect.Width();  //!!!test!!! change later
+            int previewHeight = clientRect.Height();
+
+            int xOffset = clientRect.right - previewWidth - 20;  // Right side of the window
+            int yOffset = 20;  // Top of the window
+
+        }
+    }
+}
+
+
+void View::GetHandRect(CRect& handViewRect) const
+{
+    CRect clientRect;
+    GetClientRect(&clientRect);
+
+    int previewWidth = clientRect.Width();   // Width of the enlarged preview
+    int previewHeight = clientRect.Height()/3;  // Height of the enlarged preview
+
+    int xOffset = 0;  
+    int yOffset = clientRect.Height()*0.66;
+
+    // Set the calculated preview rectangle
+    handViewRect = CRect(xOffset, yOffset, xOffset + previewWidth, yOffset + previewHeight);
 }
 
 BOOL View::OnEraseBkgnd(CDC* pDC)

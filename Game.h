@@ -27,11 +27,11 @@ public:
 	
 	std::vector<Card> getPlayerhand();
 	void nextPlayer();
-	void turn();
+	bool Playerturn(int i);
 	void processMove(Card card);
-	bool checkIfVaildMove(Card card);
+	bool checkIfValidMove(Card card);
 	void colorChange(Card card);
-public:
+	void DrawCard();
 	Game(SavedGameSettings& gameSet);
 };
 

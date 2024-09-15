@@ -35,7 +35,7 @@ void Hand::AddCard(const Card card) {
 std::vector<uint32_t> Hand::CheckForAvailableCards(const Card card) {
 	std::vector<uint32_t> possibleMoves;
 	for (uint32_t i = 0; i < hand.size(); ++i) {
-		if (hand[i].getColor() == card.Color || hand[i].getType() == card.Type || hand[i].getColor()==4) {
+		if (hand[i].getColor() == card.Color || hand[i].getType() == card.Type || hand[i].getColor()==54) {
 			possibleMoves.push_back(i);
 		}
 	}
