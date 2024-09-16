@@ -15,8 +15,8 @@ public:
 	std::vector<std::unique_ptr<Player>> players;
 	int turnOrder = 1;
 	int currentPlayer = 0;
-	uint32_t playerCount;
-	uint32_t drawSum=0;
+	UINT playerCount;
+	UINT drawSum=0;
 
 
 	//Scoreboard scBoard;
@@ -26,13 +26,24 @@ public:
 	~Game();
 	
 	std::vector<Card>& getPlayerhand();
-	void nextPlayer();
+	
 	int validatePlayerMove(int i);
-	void PlayerMove(int i,int color=0);
-	void processMove(Card card);
+	void PlayerMove(const int i,int color=0);
+	void processMove();
 	bool checkIfValidMove(Card card) const;
-	void colorChange(Card card);
+	void drawSumDraw();
 	void DrawCard();
+	
 	Game(SavedGameSettings& gameSet);
+
+	void GameGlow();
+
+
+private:
+	void nextPlayer();
+	void BotMove(UINT i, Bot* currentBot);
+	void colorChange(Card card, Bot* currentBot);
+	void outOfCards();
+	Bot* getCurrentBot();
 };
 

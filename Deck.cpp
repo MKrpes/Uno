@@ -2,7 +2,13 @@
 #include "Deck.h"
 
 
-Deck::Deck(const Deck& other) : deck(other.deck) {}
+Deck::Deck(const Deck& other) : deck(other.deck) {
+	for (Card card : deck) {
+		if (card.getType() == DrawFour || card.getType() == ColorChange) {
+			card.Color = Wildcard;
+		}
+	}
+	Shuffle(); }
 
 Deck::Deck() {
 	//generates cards that appear only once (number 0 cards)
@@ -33,10 +39,10 @@ Deck::Deck(const std::vector<Card>& other) {
 Deck::~Deck() {
 	deck.clear();
 }
-
-size_t Deck::Count() {
-	return deck.size();
-}
+//
+//size_t Deck::Count() {
+//	return deck.size();
+//}
 
 void Deck::Shuffle() {
 	std::random_device rd;  

@@ -123,20 +123,27 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 }
 void View::OnDrawButtonClick()
 {
-    if(game->currentPlayer == 0 && !game->players[0]->hasDrawn)
+    if(game->currentPlayer == 0 && !game->players[0]->hasDrawn && game->drawSum==0)
     {
         game->DrawCard();
-        game->players[0]->hasDrawn = true;
-
+        Invalidate();
+    }
+    else if(game->currentPlayer == 0 && !game->players[0]->hasDrawn && game->drawSum!=0)
+    {
+        game->drawSumDraw();
         Invalidate();
     }
 }
 
 void View::OnUnoButtonClick()
 {
-    if (game->currentPlayer == 0 && !game->players[0]->hasDrawn)
+    if (game->currentPlayer == 0 && game->players[0]->hasDrawn)
     {
-        game->validatePlayerTurn(250);
+        game->PlayerMove(-1);
+        game->GameGlow();
+        Invalidate();
+
+
     }
 }
 
@@ -166,6 +173,9 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             break;
         }
         }
+        game->GameGlow();
+        Invalidate();
+
     }
 }
 
@@ -279,9 +289,13 @@ void View::ShowHand(CDC* pDC)
     if (!game->getPlayerhand().empty())
     {
         LoadImagesFromResource();
-        std::vector<uint32_t> cardsToEnlarge =
-            game->players[0]->playerHand->CheckForAvailableCards(game->playedCards->getLast());
-
+        std::vector<UINT> cardsToEnlarge;
+        if (game->drawSum == 0) {
+            cardsToEnlarge=game->players[0]->playerHand->CheckForAvailableCards(game->playedCards->getLast());
+        }
+        else {
+            cardsToEnlarge = game->players[0]->playerHand->CheckForStackingCards(game->playedCards->getLast());
+        }
         m_imageRects.clear();
 
         Graphics graphics(pDC->GetSafeHdc());
@@ -296,12 +310,12 @@ void View::ShowHand(CDC* pDC)
         int enCount = cardsToEnlarge.size();
         for (int i = 0; i < hand_bitmaps.size(); ++i)
         {
-            int imageWidth = clientRect.Width() / (hand_bitmaps.size()-cardsToEnlarge.size()+2*cardsToEnlarge.size());
-            int imageHeight = clientRect.Height();
+            UINT imageWidth = clientRect.Width() / (hand_bitmaps.size()-cardsToEnlarge.size()+2*cardsToEnlarge.size());
+            UINT imageHeight = clientRect.Height();
             Gdiplus::Bitmap* pImage = hand_bitmaps[i];
             if (pImage)
             {
-                imageHeight*=0.5; 
+                imageHeight/=2; 
 
                 // Make sure images don't overlap
                 //if (i * imageWidth > clientRect.Width()) break;

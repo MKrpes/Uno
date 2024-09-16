@@ -10,9 +10,9 @@ public:
 	Hand(std::vector<Card> drawnCards);
 	~Hand();
 	void Sort();
-	void RemoveCard(uint32_t i);
+	void RemoveCard(UINT i);
 	void AddCard(const Card card);
-	std::vector<uint32_t> CheckForAvailableCards(const Card card);
-	std::vector<uint32_t> CheckForStackingCards(const Card card);
+	std::vector<UINT> CheckForAvailableCards(const Card card);
+	std::vector<UINT> CheckForStackingCards(const Card card);
 };
 

@@ -6,7 +6,7 @@ class Player
 public:
 	Hand* playerHand;
 	Player(const std::vector<Card> cards);
-	//~Player();
+	virtual ~Player();
 	Card PlayerTurn(int i);
 	bool hasDrawn = false;
 };

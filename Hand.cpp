@@ -23,7 +23,7 @@ void Hand::Sort() {
 	std::sort(hand.begin(), hand.end(), compareCards);
 }
 
-void Hand::RemoveCard(uint32_t i) {
+void Hand::RemoveCard(UINT i) {
 	hand.erase(hand.begin() + i);
 }
 
@@ -32,19 +32,19 @@ void Hand::AddCard(const Card card) {
 	Sort();
 }
 
-std::vector<uint32_t> Hand::CheckForAvailableCards(const Card card) {
-	std::vector<uint32_t> possibleMoves;
-	for (uint32_t i = 0; i < hand.size(); ++i) {
-		if (hand[i].getColor() == card.Color || hand[i].getType() == card.Type || hand[i].getColor()==54) {
+std::vector<UINT> Hand::CheckForAvailableCards(const Card card) {
+	std::vector<UINT> possibleMoves;
+	for (UINT i = 0; i < hand.size(); ++i) {
+		if (hand[i].getColor() == card.getColor() || hand[i].getType() == card.getType() || hand[i].getColor()==Wildcard) {
 			possibleMoves.push_back(i);
 		}
 	}
 	return possibleMoves;
 }
-std::vector<uint32_t> Hand::CheckForStackingCards(const Card card) {
-	std::vector<uint32_t> possibleMoves;
-	for (uint32_t i = 0; i < hand.size(); ++i) {
-		if (hand[i].getType() == card.Type) {
+std::vector<UINT> Hand::CheckForStackingCards(const Card card) {
+	std::vector<UINT> possibleMoves;
+	for (UINT i = 0; i < hand.size(); ++i) {
+		if (hand[i].getType() == card.getType()) {
 			possibleMoves.push_back(i);
 		}
 	}
