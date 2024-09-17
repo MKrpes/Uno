@@ -182,6 +182,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
         }
         case 0: {
             game->PlayerMove(m_hoveredImageIndex);
+            m_hoveredImageIndex = -1;
             Invalidate();
             break;
         }
@@ -190,6 +191,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             if (chooseDlg.DoModal() == IDOK) {
                 int color = chooseDlg.getChosenColor();
                 game->PlayerMove(m_hoveredImageIndex,color);
+                m_hoveredImageIndex = -1;
                 Invalidate();
             }
             break;
@@ -266,10 +268,11 @@ void View::OnDraw(CDC* pDC)
 
     // Use GDI+ to draw into the memory DC
     Graphics graphics(memoryDC.GetSafeHdc());
+    ShowPlayedCard(&memoryDC, game->playedCards->getLast());
     if (!hand_bitmaps.empty())
     {
         ShowHand(&memoryDC);
-        ShowPlayedCard(&memoryDC, game->playedCards->getLast());
+        
         // If an image is being hovered, display a larger preview
         if (m_hoveredImageIndex >= 0 && m_hoveredImageIndex < hand_bitmaps.size())
         {
@@ -280,6 +283,8 @@ void View::OnDraw(CDC* pDC)
 
     // Cleanup: Select the old bitmap back into the memory DC and delete the objects
     memoryDC.SelectObject(pOldBitmap);
+    DeleteObject(pOldBitmap);
+    DeleteDC(memoryDC);
 }
 
 
