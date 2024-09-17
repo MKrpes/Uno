@@ -172,12 +172,12 @@ void Game::colorChange(Card* card, Bot* currentBot) {
 
 void Game::DrawCard()
 {
-	if (!players[0]->hasDrawn) {
+	if (!players[currentPlayer]->hasDrawn) {
 		if (deck->deck.empty()) {
 			outOfCards();
 		}
-			players[0]->playerHand->AddCard(deck->PopTopCard());
-			players[0]->hasDrawn = true;
+			players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
+			players[currentPlayer]->hasDrawn = true;
 	}
 }
 
@@ -264,7 +264,3 @@ void Game::BotMove(UINT i, Bot* currentBot)
 	}
 }
 
-void Game::BotDrawCard(Bot* currentBot)
-{
-	//currentBot->playerHand->
-}

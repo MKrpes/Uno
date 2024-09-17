@@ -42,7 +42,6 @@ public:
 private:
 	void nextPlayer();
 	void BotMove(UINT i, Bot* currentBot);
-	void BotDrawCard(Bot* currentBot);
 	void colorChange(Card* card, Bot* currentBot);
 	void outOfCards();
 	Bot* getCurrentBot();
