@@ -19,6 +19,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_WM_SETFOCUS()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 // CMainFrame construction/destruction
@@ -93,3 +94,12 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 	return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
+void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	CFrameWnd::OnGetMinMaxInfo(lpMMI);
+
+	// Sets the minimum window size
+	lpMMI->ptMinTrackSize.x = 800;  // Minimum width
+	lpMMI->ptMinTrackSize.y = 600;  // Minimum height
+
+}

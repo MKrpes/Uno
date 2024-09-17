@@ -21,10 +21,10 @@ class View :
         DECLARE_DYNCREATE(View)
         afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
         CButton DrawButton;
-        CButton UnoButton;
+        CButton SkipButton;
         CListBox m_ListBox;
         afx_msg void OnDrawButtonClick();
-        afx_msg void OnUnoButtonClick();
+        afx_msg void OnSkipButtonClick();
         std::vector<Gdiplus::Bitmap*> hand_bitmaps;
         void OnInitialUpdate();
         std::vector<CRect> m_imageRects;          // Store the position and size of each image
@@ -36,7 +36,6 @@ class View :
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
         afx_msg void OnMouseMove(UINT nFlags, CPoint point);    // Handle mouse hover
         void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage);
-        DECLARE_MESSAGE_MAP()
 
         
         void ShowPlayedCard(CDC* pDC, const Card card) const;
@@ -45,6 +44,7 @@ class View :
         void ShowHand(CDC* pDC);
         void GetHandRect(CRect& previewRect) const;
         BOOL OnEraseBkgnd(CDC* pDC);
+        DECLARE_MESSAGE_MAP()
 
 };
 

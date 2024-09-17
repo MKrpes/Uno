@@ -8,7 +8,7 @@ IMPLEMENT_DYNCREATE(View, CView)
 BEGIN_MESSAGE_MAP(View, CView)
     ON_WM_CREATE()
     ON_BN_CLICKED(1001, &View::OnDrawButtonClick)
-    ON_BN_CLICKED(1002, &View::OnUnoButtonClick)
+    ON_BN_CLICKED(1002, &View::OnSkipButtonClick)
     ON_WM_LBUTTONDOWN()
     ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
@@ -33,22 +33,6 @@ void View::OnInitialUpdate()
     {
         AfxMessageBox(_T("Failed to load the image resource"));
     }
-
-    // Force a redraw to display the loaded image
-    CRect rect(10, 10, 200, 250);
-
-    // Create the listbox with necessary styles
-    m_ListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, 1001);
-
-    // Add some items to the listbox
-    CString str;
-    str.Format(_T("You: %d"), game->getPlayerhand().size());
-    m_ListBox.AddString(str);
-    for (UINT i = 1; i < game->playerCount; ++i) {
-        str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
-        m_ListBox.AddString(str);
-    }
-
     Invalidate();
 }
 
@@ -82,7 +66,7 @@ void View::OnMouseMove(UINT nFlags, CPoint point)
     if (hand.PtInRect(point)) {
         for (int i = 0; i < m_imageRects.size(); ++i)
         {
-            if (m_imageRects[i].PtInRect(point)) //moguce puno bolje
+            if (m_imageRects[i].PtInRect(point)) 
             {
                 // If the hovered image changed, update it
                 if (m_hoveredImageIndex != i)
@@ -102,7 +86,7 @@ void View::OnMouseMove(UINT nFlags, CPoint point)
     }
 
     // If no image is hovered, reset the hover index
-    if (!hoverChanged && m_hoveredImageIndex != -1)
+    if (!hoverChanged && m_hoveredImageIndex != -1 && !m_imageRects[m_hoveredImageIndex].PtInRect(point))
     {
         hoverChanged = true;
 
@@ -131,11 +115,27 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     DrawButton.Create(_T("Draw"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         CRect(300, 300, 400, 330), this, 1001);
 
-    UnoButton.Create(_T("Uno"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+    SkipButton.Create(_T("Uno"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         CRect(200, 200, 300, 230), this, 1002);
 
+    // Force a redraw to display the loaded image
+    CRect rect(10, 10, 200, 250);
+
+    // Create the listbox with necessary styles
+    m_ListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, 1001);
+
+    // Add some items to the listbox
+    CString str;
+    str.Format(_T("You: %u"), game->getPlayerhand().size());
+    m_ListBox.AddString(str);
+    for (UINT i = 1; i < game->playerCount; ++i) {
+        str.Format(_T("opponent %u: %u"), i, game->players[i]->playerHand->hand.size());
+        m_ListBox.AddString(str);
+    }
     return 0;
 }
+
+
 void View::OnDrawButtonClick()
 {
     if(game->currentPlayer == 0 && !game->players[0]->hasDrawn && game->drawSum==0)
@@ -150,7 +150,7 @@ void View::OnDrawButtonClick()
     }
 }
 
-void View::OnUnoButtonClick()
+void View::OnSkipButtonClick()
 {
     if (game->currentPlayer == 0 && game->players[0]->hasDrawn)
     {
@@ -158,10 +158,10 @@ void View::OnUnoButtonClick()
         game->GameGlow();
         m_ListBox.ResetContent();
         CString str;
-        str.Format(_T("You: %d"), game->getPlayerhand().size());
+        str.Format(_T("You: %u"), game->getPlayerhand().size());
         m_ListBox.AddString(str);
         for (UINT i = 1; i < game->playerCount; ++i) {
-            str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
+            str.Format(_T("opponent %u: %u"), i, game->players[i]->playerHand->hand.size());
             m_ListBox.AddString(str);
         }
 
@@ -290,14 +290,15 @@ void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)
         CRect clientRect;
         GetPreviewRect(clientRect);
 
+
         int previewWidth = clientRect.Width();  //!!!test!!! change later
         int previewHeight = clientRect.Height();
 
-        int xOffset = clientRect.right - previewWidth - 20;  // Right side of the window
+        int xOffset = clientRect.right - previewWidth;  // Right side of the window
         int yOffset = 20;  // Top of the window
 
         // Draw the enlarged preview of the hovered image
-        graphics.DrawImage(pImage, xOffset, yOffset, previewWidth, previewHeight);
+        graphics.DrawImage(pImage, xOffset, yOffset, previewWidth-20, previewHeight-20);
     }
 }
 
@@ -307,8 +308,8 @@ void View::GetPreviewRect(CRect& previewRect) const
     CRect clientRect;
     GetClientRect(&clientRect);
 
-    int previewWidth = 500;   // Width of the enlarged preview
-    int previewHeight = 200;  // Height of the enlarged preview
+    int previewWidth = clientRect.Width()/4;   // Width of the enlarged preview
+    int previewHeight = clientRect.Height()/4;  // Height of the enlarged preview
 
     int xOffset = clientRect.right - previewWidth;  // Place on the right
     int yOffset = 20;  // Top of the window
@@ -344,26 +345,28 @@ void View::ShowHand(CDC* pDC)
         for (int i = 0; i < hand_bitmaps.size(); ++i)
         {
             UINT imageWidth = clientRect.Width() / (hand_bitmaps.size()-cardsToEnlarge.size()+2*cardsToEnlarge.size());
+
             UINT imageHeight = clientRect.Height();
             Gdiplus::Bitmap* pImage = hand_bitmaps[i];
             if (pImage)
             {
                 imageHeight/=2; 
+                if (pImage->GetWidth() / 2 < imageWidth) { //prevents cards from taking the entire screen
+                    imageWidth = pImage->GetWidth() / 2;
+                }
 
-                // Make sure images don't overlap
-                //if (i * imageWidth > clientRect.Width()) break;
-
-                for (uint32_t j : cardsToEnlarge)
+                for (UINT j : cardsToEnlarge)
                 {
                     if (j == i) {
                         imageWidth *= 2;
                         imageHeight=clientRect.Height();
+                        if (pImage->GetWidth() < imageWidth) { //prevents cards from taking the entire screen
+                            imageWidth = pImage->GetWidth();
+                        }
                         break;
                     }
                 }
-                if (pImage->GetWidth() < imageWidth) { //prevents cards from taking the entire screen
-                    imageWidth = pImage->GetWidth();
-                }
+
                 int yOffset = clientRect.bottom - imageHeight; // Leave space for image row
 
                 // Draw the image at the bottom

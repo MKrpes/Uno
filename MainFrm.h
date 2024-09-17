@@ -24,6 +24,7 @@ public:
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
+	virtual void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 
 // Implementation
 public:
