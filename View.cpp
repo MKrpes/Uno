@@ -137,6 +137,7 @@ void View::OnDrawButtonClick()
         UpdateListBox();
 
         Invalidate();
+        UpdateWindow();
     }
     else if(game->currentPlayer == 0 && !game->players[0]->hasDrawn && game->drawSum!=0)
     {
@@ -144,6 +145,7 @@ void View::OnDrawButtonClick()
         UpdateListBox();
 
         Invalidate();
+        UpdateWindow();
     }
 }
 
