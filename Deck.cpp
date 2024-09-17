@@ -39,10 +39,6 @@ Deck::Deck(const std::vector<Card>& other) {
 Deck::~Deck() {
 	deck.clear();
 }
-//
-//size_t Deck::Count() {
-//	return deck.size();
-//}
 
 void Deck::Shuffle() {
 	std::random_device rd;  
@@ -54,6 +50,17 @@ Card Deck::PopTopCard() {
 	Card TopCard = deck.front();
 	deck.erase(deck.begin());
 	return TopCard;
+}
+Card Deck::PopTopNSCard()
+{
+	for (UINT i = 0; i < deck.size(); ++i) {
+		if (deck[i].Type >= Skip) continue;
+		else {
+			Card card = deck[i];
+			deck.erase(deck.begin() + i);
+			return card;
+		}
+	}
 }
 std::vector<Card> Deck::GetStartingHand() {
 	std::vector<Card> startingHand;

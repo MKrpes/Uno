@@ -11,9 +11,9 @@ class Deck
 	
 
 public:
-	size_t Count();
 	Deck();
 	Card PopTopCard();
+	Card PopTopNSCard();
 	std::vector<Card> deck;
 	
 	std::vector<Card> GetStartingHand();

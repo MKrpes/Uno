@@ -4,7 +4,7 @@
 Game::Game(SavedGameSettings& gameSet) {
 	playerCount = gameSet.playerCount;
 	deck = new Deck();
-	playedCards = new PlayedCards(deck->PopTopCard());
+	playedCards = new PlayedCards(deck->PopTopNSCard());
 	players.push_back(std::make_unique<Player>(deck->GetStartingHand()));
 	for (uint32_t i=1; i < playerCount; ++i) {
 		players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
