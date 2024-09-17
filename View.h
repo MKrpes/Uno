@@ -2,6 +2,7 @@
 #include <afxwin.h>
 #include <gdiplus.h>
 #include<vector>
+#include<string.h>
 #include"Uno.h"
 #include"Game.h"
 #include"Card.h"
@@ -21,6 +22,7 @@ class View :
         afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
         CButton DrawButton;
         CButton UnoButton;
+        CListBox m_ListBox;
         afx_msg void OnDrawButtonClick();
         afx_msg void OnUnoButtonClick();
         std::vector<Gdiplus::Bitmap*> hand_bitmaps;

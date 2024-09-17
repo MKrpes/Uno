@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "View.h"
 #include"Resource.h"
+#include <string>
 
 
 IMPLEMENT_DYNCREATE(View, CView)
@@ -34,6 +35,20 @@ void View::OnInitialUpdate()
     }
 
     // Force a redraw to display the loaded image
+    CRect rect(10, 10, 200, 250);
+
+    // Create the listbox with necessary styles
+    m_ListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, 1001);
+
+    // Add some items to the listbox
+    CString str;
+    str.Format(_T("You: %d"), game->getPlayerhand().size());
+    m_ListBox.AddString(str);
+    for (UINT i = 1; i < game->playerCount; ++i) {
+        str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
+        m_ListBox.AddString(str);
+    }
+
     Invalidate();
 }
 
@@ -114,10 +129,10 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 
     // Create a button
     DrawButton.Create(_T("Draw"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-        CRect(10, 10, 100, 40), this, 1001);
+        CRect(300, 300, 400, 330), this, 1001);
 
     UnoButton.Create(_T("Uno"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-        CRect(100, 100, 200, 130), this, 1002);
+        CRect(200, 200, 300, 230), this, 1002);
 
     return 0;
 }
@@ -141,6 +156,15 @@ void View::OnUnoButtonClick()
     {
         game->PlayerMove(-1);
         game->GameGlow();
+        m_ListBox.ResetContent();
+        CString str;
+        str.Format(_T("You: %d"), game->getPlayerhand().size());
+        m_ListBox.AddString(str);
+        for (UINT i = 1; i < game->playerCount; ++i) {
+            str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
+            m_ListBox.AddString(str);
+        }
+
         Invalidate();
 
 
@@ -174,6 +198,15 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
         }
         }
         game->GameGlow();
+        m_ListBox.ResetContent();
+        CString str;
+        str.Format(_T("You: %d"), game->getPlayerhand().size());
+        m_ListBox.AddString(str);
+        for (UINT i = 1; i < game->playerCount; ++i) {
+            str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
+            m_ListBox.AddString(str);
+        }
+
         Invalidate();
 
     }

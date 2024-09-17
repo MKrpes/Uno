@@ -21,8 +21,8 @@ UINT Bot::ReturnHighestPriority(Card card, int drawsum)
 			std::map<CardColors, UINT> colorCount = ColorCount();
 			UINT choice = possibleMoves[0];
 			for (UINT i : possibleMoves) {
-				if (playerHand->hand.at(i).getType() > playerHand->hand.at(choice).getType() && 
-					colorCount[playerHand->hand.at(i).getColor()]> colorCount[playerHand->hand.at(choice).getColor()]) {
+				if (playerHand->hand.at(i).Type > playerHand->hand.at(choice).Type && 
+					colorCount[playerHand->hand.at(i).Color]> colorCount[playerHand->hand.at(choice).Color]) {
 
 						choice = i;
 				}

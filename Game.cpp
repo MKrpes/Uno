@@ -52,38 +52,72 @@ void Game::PlayerMove(const int i, int color)
 		Card card = getPlayerhand()[i];
 		switch (card.getType()) {
 		case 10: {
-			nextPlayer();
+			if (playerCount == 2) {
+				playedCards->playerTurn(card);
+				getPlayerhand().erase(getPlayerhand().begin() + i);
+			}
+			else {
+				nextPlayer();
+				nextPlayer();
+			}
 			break;
 		}
 		case 11: {
 			if (playerCount == 2) {
+				playedCards->playerTurn(card);
+				getPlayerhand().erase(getPlayerhand().begin() + i);
+			}
+			else {
+				turnOrder = -turnOrder;
+				playedCards->playerTurn(card);
+				getPlayerhand().erase(getPlayerhand().begin() + i);
 				nextPlayer();
 			}
-			turnOrder = -turnOrder;
 			break;
 		}
 		case 12: {
 			drawSum += 2;
+			playedCards->playerTurn(card);
+			getPlayerhand().erase(getPlayerhand().begin() + i);
+			nextPlayer();
+
 			break;
 		}
 		case 13: {
 			card.Color = (CardColors)color;
+			playedCards->playerTurn(card);
+			getPlayerhand().erase(getPlayerhand().begin() + i);
+			nextPlayer();
+
 			break;
 		}
 		case 14: {
 			drawSum += 4;
 			card.Color = (CardColors)color;
+			playedCards->playerTurn(card);
+			getPlayerhand().erase(getPlayerhand().begin() + i);
+			nextPlayer();
+
+			break;
+		}default:
+		{
+			playedCards->playerTurn(card);
+			getPlayerhand().erase(getPlayerhand().begin() + i);
+			nextPlayer();
 			break;
 		}
 		}
-		playedCards->playerTurn(card);
-		getPlayerhand().erase(getPlayerhand().begin() + i);
+
 	}
-	nextPlayer();
+	else {
+		nextPlayer();
+
+	}
 }
 
 void Game::processMove() {
 	Bot* currentBot = getCurrentBot();
+	currentBot->hasDrawn = false;
 	UINT move = currentBot->ReturnHighestPriority(playedCards->getLast(), drawSum);
 	if (move==-1) {
 		if (drawSum != 0) {
@@ -132,18 +166,18 @@ bool Game::checkIfValidMove(Card card) const{
 
 
 
-void Game::colorChange(Card card, Bot* currentBot) { 
-	card.Color = currentBot->ChooseColorToChange();
+void Game::colorChange(Card* card, Bot* currentBot) { 
+	card->Color = currentBot->ChooseColorToChange();
 }
 
 void Game::DrawCard()
 {
-	if (!players[currentPlayer]->hasDrawn) {
+	if (!players[0]->hasDrawn) {
 		if (deck->deck.empty()) {
 			outOfCards();
 		}
-			players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
-			players[currentPlayer]->hasDrawn = true;
+			players[0]->playerHand->AddCard(deck->PopTopCard());
+			players[0]->hasDrawn = true;
 	}
 }
 
@@ -174,31 +208,63 @@ void Game::BotMove(UINT i, Bot* currentBot)
 	Card card = currentBot->PlayerTurn(i);
 	switch (card.getType()) {
 	case 10: {
-		nextPlayer();
+		if (playerCount == 2) {
+			currentBot->playerHand->RemoveCard(i);
+			playedCards->playerTurn(card);
+
+		}
+		else {
+			currentBot->playerHand->RemoveCard(i);
+			playedCards->playerTurn(card);
+			nextPlayer();
+			nextPlayer();
+		}
 		break;
 	}
 	case 11: {
 		if (playerCount == 2) {
+			currentBot->playerHand->RemoveCard(i);
+			playedCards->playerTurn(card);
+
+		}
+		else {
+			turnOrder = -turnOrder;
+			currentBot->playerHand->RemoveCard(i);
+			playedCards->playerTurn(card);
 			nextPlayer();
 		}
-		turnOrder = -turnOrder;
 		break;
 	}
 	case 12: {
 		drawSum += 2;
+		currentBot->playerHand->RemoveCard(i);
+		playedCards->playerTurn(card);
+		nextPlayer();
 		break;
 	}
 	case 13: {
-		colorChange(card, currentBot);
+		colorChange(&card, currentBot);
+		currentBot->playerHand->RemoveCard(i);
+		playedCards->playerTurn(card);
+		nextPlayer();
 		break;
 	}
 	case 14: {
 		drawSum += 4;
-		colorChange(card, currentBot);
+		colorChange(&card, currentBot);
+		currentBot->playerHand->RemoveCard(i);
+		playedCards->playerTurn(card);
+		nextPlayer();
+		break;
+	}default:
+		currentBot->playerHand->RemoveCard(i);
+		playedCards->playerTurn(card);
+		nextPlayer();
 		break;
 	}
-	}
-	currentBot->playerHand->RemoveCard(i);
-	playedCards->playerTurn(card);
-	nextPlayer();
+}
+
+void Game::BotDrawCard(Bot* currentBot)
+{
+	//currentBot->playerHand->
 }

@@ -6,7 +6,7 @@
 class Bot : public Player
 {
 public:
-	Hand* playerHand;
+	//Hand* playerHand;
 	using Player::Player;
 	Bot(const std::vector<Card> cards) : Player(cards){ playerHand = new Hand(cards); }
 	UINT ReturnHighestPriority(Card card, int drawsum=0);
