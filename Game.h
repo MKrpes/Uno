@@ -19,7 +19,7 @@ public:
 	UINT drawSum=0;
 
 
-	//Scoreboard scBoard;
+	Scoreboard* scBoard;
 	Deck* deck;
 	PlayedCards* playedCards;
 	
@@ -33,10 +33,11 @@ public:
 	bool checkIfValidMove(Card card) const;
 	void drawSumDraw();
 	void DrawCard();
+	void PlayerUNOdraw();
 	
 	Game(SavedGameSettings& gameSet);
 
-	void GameGlow();
+	void GameFlow();
 
 
 private:

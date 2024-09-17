@@ -9,9 +9,19 @@ Game::Game(SavedGameSettings& gameSet) {
 	for (uint32_t i=1; i < playerCount; ++i) {
 		players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
 	}
+	switch (gameSet.GameType) {
+	case 1: {
+		scBoard = new Scoreboard(playerCount, (types)gameSet.GameType, gameSet.winsNeeded);
+		break;
+	}
+	case 2: {
+		scBoard = new Scoreboard(playerCount, (types)gameSet.GameType, gameSet.pointsNeeded);
+		break;
+	}
+	}
 }
 
-void Game::GameGlow()
+void Game::GameFlow()
 {
 	while (currentPlayer != 0) {
 		processMove();
@@ -118,7 +128,7 @@ void Game::PlayerMove(const int i, int color)
 void Game::processMove() {
 	Bot* currentBot = getCurrentBot();
 	currentBot->hasDrawn = false;
-	UINT move = currentBot->ReturnHighestPriority(playedCards->getLast(), drawSum);
+	int move = currentBot->ReturnHighestPriority(playedCards->getLast(), drawSum);
 	if (move==-1) {
 		if (drawSum != 0) {
 
@@ -178,6 +188,16 @@ void Game::DrawCard()
 		}
 			players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
 			players[currentPlayer]->hasDrawn = true;
+	}
+}
+
+void Game::PlayerUNOdraw()
+{
+	for (int i = 0; i < 2; ++i) {
+		if (deck->deck.empty()) {
+			outOfCards();
+		}
+		players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
 	}
 }
 

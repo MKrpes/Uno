@@ -3,11 +3,8 @@
 #include"Player.h"
 
 
-//Bot::Bot(const std::vector<Card> cards){
-//	playerHand = new Hand(cards);
-//}
 
-UINT Bot::ReturnHighestPriority(Card card, int drawsum)
+int Bot::ReturnHighestPriority(Card card, int drawsum)
 {
 	if (drawsum == 0) {
 		std::vector<UINT> possibleMoves = playerHand->CheckForAvailableCards(card);

@@ -9,6 +9,7 @@ BEGIN_MESSAGE_MAP(View, CView)
     ON_WM_CREATE()
     ON_BN_CLICKED(1001, &View::OnDrawButtonClick)
     ON_BN_CLICKED(1002, &View::OnSkipButtonClick)
+    ON_BN_CLICKED(1003, &View::OnUnoButtonClick)
     ON_WM_LBUTTONDOWN()
     ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
@@ -33,6 +34,7 @@ void View::OnInitialUpdate()
     {
         AfxMessageBox(_T("Failed to load the image resource"));
     }
+
     Invalidate();
 }
 
@@ -46,14 +48,9 @@ BOOL View::LoadImagesFromResource()
         delete img;
     }
     hand_bitmaps.clear();
-
-
-
     for (Card card : game->getPlayerhand()) {
         hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.Color*100+card.Type)));
     }
-
-    // Redraw the view
     return TRUE;
 }
 
@@ -111,27 +108,23 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     if (CView::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-    // Create a button
-    DrawButton.Create(_T("Draw"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-        CRect(300, 300, 400, 330), this, 1001);
 
-    SkipButton.Create(_T("Uno"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-        CRect(200, 200, 300, 230), this, 1002);
+    DrawButton.Create(_T("Draw"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+        CRect(0, 265, 100, 295), this, 1001);
+
+    SkipButton.Create(_T("Skip"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+        CRect(0, 225, 100, 255), this, 1002);
+
+    UnoButton.Create(_T("Uno"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+        CRect(0, 315, 100, 345), this, 1003);
 
     // Force a redraw to display the loaded image
-    CRect rect(10, 10, 200, 250);
+    CRect rect(10, 10, 200, 220);
 
     // Create the listbox with necessary styles
-    m_ListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, 1001);
+    m_ListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, NULL);
+    UpdateListBox();
 
-    // Add some items to the listbox
-    CString str;
-    str.Format(_T("You: %u"), game->getPlayerhand().size());
-    m_ListBox.AddString(str);
-    for (UINT i = 1; i < game->playerCount; ++i) {
-        str.Format(_T("opponent %u: %u"), i, game->players[i]->playerHand->hand.size());
-        m_ListBox.AddString(str);
-    }
     return 0;
 }
 
@@ -141,11 +134,15 @@ void View::OnDrawButtonClick()
     if(game->currentPlayer == 0 && !game->players[0]->hasDrawn && game->drawSum==0)
     {
         game->DrawCard();
+        UpdateListBox();
+
         Invalidate();
     }
     else if(game->currentPlayer == 0 && !game->players[0]->hasDrawn && game->drawSum!=0)
     {
         game->drawSumDraw();
+        UpdateListBox();
+
         Invalidate();
     }
 }
@@ -155,20 +152,21 @@ void View::OnSkipButtonClick()
     if (game->currentPlayer == 0 && game->players[0]->hasDrawn)
     {
         game->PlayerMove(-1);
-        game->GameGlow();
-        m_ListBox.ResetContent();
-        CString str;
-        str.Format(_T("You: %u"), game->getPlayerhand().size());
-        m_ListBox.AddString(str);
-        for (UINT i = 1; i < game->playerCount; ++i) {
-            str.Format(_T("opponent %u: %u"), i, game->players[i]->playerHand->hand.size());
-            m_ListBox.AddString(str);
+
+        while (game->currentPlayer != 0) {
+
+            game->processMove();
+            UpdateListBox();
+            Invalidate();
+            UpdateWindow();
+            Sleep(1500);
         }
-
-        Invalidate();
-
-
     }
+}
+
+void View::OnUnoButtonClick()
+{
+    isUno = true;
 }
 
 afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -197,24 +195,28 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             break;
         }
         }
-        game->GameGlow();
-        m_ListBox.ResetContent();
-        CString str;
-        str.Format(_T("You: %d"), game->getPlayerhand().size());
-        m_ListBox.AddString(str);
-        for (UINT i = 1; i < game->playerCount; ++i) {
-            str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
-            m_ListBox.AddString(str);
-        }
 
-        Invalidate();
+        if (!isUno && game->getPlayerhand().size() <= 1) {
+            AfxMessageBox(_T("Uno not called"));
+            game->PlayerUNOdraw();
+            Invalidate();
+        }
+        UpdateListBox();
+
+        isUno = false;
+        while (game->currentPlayer != 0) {
+
+            game->processMove();
+            UpdateListBox();
+            Sleep(5);
+            Invalidate();  
+            UpdateWindow();
+            Sleep(1500);
+        }
+        UpdateListBox();
 
     }
 }
-
-
-
-
 
 void View::ShowPlayedCard(CDC* pDC, const Card card) const {
     HMODULE hModule = AfxGetInstanceHandle();
@@ -227,8 +229,8 @@ void View::ShowPlayedCard(CDC* pDC, const Card card) const {
         CRect clientRect;
         GetClientRect(&clientRect);
 
-        int previewWidth = 100;   //!!!test!!! change later
-        int previewHeight = 200;  
+        int previewWidth = pImage->GetWidth()*0.75;   //!!!test!!! change later
+        int previewHeight = pImage->GetHeight()*0.75;  
 
         int xOffset = clientRect.right / 2 - previewWidth;  //!!!test!!! change later
         int yOffset = clientRect.bottom / 2 - previewHeight;  
@@ -244,6 +246,7 @@ void View::loadGame(Game* gm)
 
 void View::OnDraw(CDC* pDC)
 {
+
     // Create a memory DC to perform double buffering
     CRect clientRect;
     GetClientRect(&clientRect);
@@ -318,6 +321,20 @@ void View::GetPreviewRect(CRect& previewRect) const
     previewRect = CRect(xOffset, yOffset, xOffset + previewWidth, yOffset + previewHeight);
 }
 
+void View::UpdateListBox()
+{
+    m_ListBox.ResetContent();
+    CString str;
+    str.Format(_T("You: %d"), game->getPlayerhand().size());
+    m_ListBox.AddString(str);
+    for (UINT i = 1; i < game->playerCount; ++i) {
+        str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
+        m_ListBox.AddString(str);
+    }
+    m_ListBox.SetCurSel(game->currentPlayer);
+
+}
+
 void View::ShowHand(CDC* pDC)
 {
     if (!game->getPlayerhand().empty())
@@ -339,14 +356,12 @@ void View::ShowHand(CDC* pDC)
         GetHandRect(clientRect);
 
         int xOffset = 0;  // Horizontal position to start drawing
-        //int imageWidth = clientRect.Width() / hand_bitmaps.size();
-        //int imageHeight = clientRect.Height() / 2;
         int enCount = cardsToEnlarge.size();
         for (int i = 0; i < hand_bitmaps.size(); ++i)
         {
             UINT imageWidth = clientRect.Width() / (hand_bitmaps.size()-cardsToEnlarge.size()+2*cardsToEnlarge.size());
 
-            UINT imageHeight = clientRect.Height();
+            UINT imageHeight = clientRect.Height()-5;
             Gdiplus::Bitmap* pImage = hand_bitmaps[i];
             if (pImage)
             {
@@ -409,3 +424,4 @@ BOOL View::OnEraseBkgnd(CDC* pDC)
     // Prevents background from being erased to reduce flickering
     return TRUE;
 }
+

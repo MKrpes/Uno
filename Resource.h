@@ -12,15 +12,16 @@
 #define IDR_UnoGameTYPE                 130
 #define IDD_DIALOG1                     310
 #define IDD_DIALOG2                     318
-#define IDB_PNG1                        322
-#define IDB_WILDCARD_BLUE_CHANGECOLOR   5313
-#define IDB_WILDCARD_BLUE_DRAW4         5314
-#define IDB_WILDCARD_GREEN_CHANGECOLOR  5213
-#define IDB_WILDCARD_GREEN_DRAW4        5214
-#define IDB_WILDCARD_RED_CHANGECOLOR    5013
-#define IDB_WILDCARD_RED_DRAW4          5014
-#define IDB_WILDCARD_YELLOW_CHANGECOLOR 5113
-#define IDB_WILDCARD_YELLOW_DRAW4       5114
+#define IDB_WILDCARD_BLUE_CHANGECOLOR   431
+#define IDB_WILDCARD_BLUE_DRAW4         432
+#define IDB_WILDCARD_GREEN_CHANGECOLOR  433
+#define IDB_WILDCARD_GREEN_DRAW4        434
+#define IDB_WILDCARD_RED_CHANGECOLOR    435
+#define IDB_WILDCARD_RED_DRAW4          436
+#define IDB_WILDCARD_YELLOW_CHANGECOLOR 437
+#define IDB_WILDCARD_YELLOW_DRAW4       438
+#define IDB_CARD_BACK                   439
+#define IDD_DIALOG3                     440
 #define IDC_SLIDER1                     1000
 #define IDC_LIST1                       1001
 #define IDC_CHECK1                      1002
@@ -91,7 +92,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        439
+#define _APS_NEXT_RESOURCE_VALUE        442
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1017
 #define _APS_NEXT_SYMED_VALUE           310

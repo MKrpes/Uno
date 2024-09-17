@@ -323,5 +323,8 @@
     <Image Include="res\Cards\UNO_WILDCARD_YELLOW_D4.bmp">
       <Filter>Resource Files\Cards</Filter>
     </Image>
+    <Image Include="res\Cards\UNO-Back_1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

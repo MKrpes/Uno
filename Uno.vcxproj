@@ -237,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Users\Korisnik\Downloads\UNO-Back_1.png" />
+    <Image Include="res\Cards\UNO-Back_1.bmp" />
     <Image Include="res\Cards\UNO_BLUE0.bmp" />
     <Image Include="res\Cards\UNO_BLUE1.bmp" />
     <Image Include="res\Cards\UNO_BLUE2.bmp" />

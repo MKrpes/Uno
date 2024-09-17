@@ -8,6 +8,9 @@
 #include"Card.h"
 #include"ChooseColorDlg.h"
 
+#include <future>
+#include <chrono>
+
 
 class View :
     public CView
@@ -22,9 +25,12 @@ class View :
         afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
         CButton DrawButton;
         CButton SkipButton;
+        CButton UnoButton;
+        bool isUno = false;
         CListBox m_ListBox;
         afx_msg void OnDrawButtonClick();
         afx_msg void OnSkipButtonClick();
+        afx_msg void OnUnoButtonClick();
         std::vector<Gdiplus::Bitmap*> hand_bitmaps;
         void OnInitialUpdate();
         std::vector<CRect> m_imageRects;          // Store the position and size of each image
@@ -40,7 +46,8 @@ class View :
         
         void ShowPlayedCard(CDC* pDC, const Card card) const;
         void GetPreviewRect(CRect& previewRect) const;
-        
+        void UpdateListBox();
+
         void ShowHand(CDC* pDC);
         void GetHandRect(CRect& previewRect) const;
         BOOL OnEraseBkgnd(CDC* pDC);
