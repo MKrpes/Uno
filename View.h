@@ -44,7 +44,7 @@ class View :
         void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage);
 
         
-        void ShowPlayedCard(CDC* pDC, const Card card) const;
+        void ShowPlayedCard(CDC* pDC, const Card card);
         void GetPreviewRect(CRect& previewRect) const;
         void UpdateListBox();
 

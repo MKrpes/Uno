@@ -182,7 +182,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
         }
         case 0: {
             game->PlayerMove(m_hoveredImageIndex);
-            m_hoveredImageIndex = -1;
+            m_hoveredImageIndex = 0;
             Invalidate();
             break;
         }
@@ -191,7 +191,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             if (chooseDlg.DoModal() == IDOK) {
                 int color = chooseDlg.getChosenColor();
                 game->PlayerMove(m_hoveredImageIndex,color);
-                m_hoveredImageIndex = -1;
+                m_hoveredImageIndex = 0;
                 Invalidate();
             }
             break;
@@ -210,7 +210,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
 
             game->processMove();
             UpdateListBox();
-            Sleep(5);
+            //Sleep(5);
             Invalidate();  
             UpdateWindow();
             Sleep(1500);
@@ -220,9 +220,9 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
     }
 }
 
-void View::ShowPlayedCard(CDC* pDC, const Card card) const {
+void View::ShowPlayedCard(CDC* pDC,const Card card) {
     HMODULE hModule = AfxGetInstanceHandle();
-    Gdiplus::Bitmap* pImage = Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.Color * 100 + card.Type));
+    Gdiplus::Bitmap* pImage = Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.getColor() * 100 + card.getType()));
 
     if (pImage)
     {
@@ -231,13 +231,18 @@ void View::ShowPlayedCard(CDC* pDC, const Card card) const {
         CRect clientRect;
         GetClientRect(&clientRect);
 
-        int previewWidth = pImage->GetWidth()*0.75;   //!!!test!!! change later
+        int previewWidth = pImage->GetWidth()*0.75;   
         int previewHeight = pImage->GetHeight()*0.75;  
 
-        int xOffset = clientRect.right / 2 - previewWidth;  //!!!test!!! change later
+        int xOffset = clientRect.right / 2 - previewWidth;  
         int yOffset = clientRect.bottom / 2 - previewHeight;  
 
         graphics.DrawImage(pImage, xOffset, yOffset, previewWidth, previewHeight);
+    }
+    else {
+        CString str;
+        str.Format(_T("card: c %d,t %d not found"), card.Color,card.Type);
+        AfxMessageBox(str);
     }
 }
 

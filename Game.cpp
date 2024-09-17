@@ -151,7 +151,8 @@ void Game::processMove() {
 		}
 		else {
 			DrawCard();
-			if (currentBot->ReturnHighestPriority(playedCards->getLast()) == -1) {
+			move = currentBot->ReturnHighestPriority(playedCards->getLast());
+			if(move == -1) {
 				nextPlayer();
 			}
 			else {
@@ -197,7 +198,7 @@ void Game::PlayerUNOdraw()
 		if (deck->deck.empty()) {
 			outOfCards();
 		}
-		players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
+		players[0]->playerHand->AddCard(deck->PopTopCard());
 	}
 }
 
