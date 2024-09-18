@@ -46,6 +46,7 @@ BOOL View::LoadImagesFromResource()
     for (Card card : game->getPlayerhand()) {
         hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.Color*100+card.Type)));
     }
+
     return TRUE;
 }
 
@@ -243,7 +244,7 @@ void View::loadGame(Game* gm)
 
 void View::OnDraw(CDC* pDC)
 {
-    
+
     // Create a memory DC to perform double buffering
     CRect clientRect;
     GetClientRect(&clientRect);
@@ -357,8 +358,8 @@ void View::ShowHand(CDC* pDC)
         CRect clientRect;
         GetHandRect(clientRect);
 
-        int xOffset = 0;  // Horizontal position to start drawing
-        int enCount = cardsToEnlarge.size();
+        int xOffset = 0;
+
         for (int i = 0; i < hand_bitmaps.size(); ++i)
         {
             UINT imageWidth = clientRect.Width() / (hand_bitmaps.size()-cardsToEnlarge.size()+2*cardsToEnlarge.size());
@@ -442,7 +443,7 @@ void View::ShowWinScreen(int player, const bool rndWin)
         return;
     }
     else {
-        this->~View();
+        //this->~View();
         AfxGetMainWnd()->PostMessage(WM_CLOSE);
     }
 

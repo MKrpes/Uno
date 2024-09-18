@@ -19,6 +19,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_WM_SETFOCUS()
+	ON_WM_CLOSE()
 	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
@@ -102,4 +103,8 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	lpMMI->ptMinTrackSize.x = 800;  // Minimum width
 	lpMMI->ptMinTrackSize.y = 600;  // Minimum height
 
+}
+void CMainFrame::OnClose() {
+	AfxGetMainWnd()->PostMessage(WM_CLOSE); // Exit the message loop and clean up
+	CFrameWnd::OnClose();  // Call the base class to ensure proper handling
 }

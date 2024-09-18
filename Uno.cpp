@@ -104,6 +104,8 @@ BOOL CUnoGameApp::InitInstance()
 			WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
 			nullptr);
 		if (gameSet.isFullscreen) {
+			pFrame->ModifyStyle(WS_OVERLAPPEDWINDOW, 0);
+			pFrame->ModifyStyle(WS_EX_CLIENTEDGE, 0);
 			pFrame->ShowWindow(SW_SHOWMAXIMIZED);
 		}
 		else {

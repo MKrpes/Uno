@@ -140,9 +140,6 @@
     <Image Include="res\Uno.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\Users\Korisnik\Downloads\UNO-Back_1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\Cards\UNO_BLUE0.bmp">
       <Filter>Resource Files\Cards</Filter>
     </Image>
