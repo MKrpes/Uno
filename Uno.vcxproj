@@ -201,6 +201,7 @@
     <ClInclude Include="PlayedCards.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RoundWinDlg.h" />
     <ClInclude Include="SavedGameSettings.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="targetver.h" />
@@ -224,6 +225,7 @@
     </ClCompile>
     <ClCompile Include="PlayedCards.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RoundWinDlg.cpp" />
     <ClCompile Include="SavedGameSettings.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="Uno.cpp" />

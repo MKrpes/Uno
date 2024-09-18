@@ -11,6 +11,7 @@
 
 class Game
 {
+	friend class View;
 public:
 	std::vector<std::unique_ptr<Player>> players;
 	int turnOrder = 1;
@@ -28,23 +29,25 @@ public:
 	std::vector<Card>& getPlayerhand();
 	
 	int validatePlayerMove(int i);
-	void PlayerMove(const int i,int color=0);
-	void processMove();
+	bool PlayerMove(const int i,int color=0);
+	bool processMove();
 	bool checkIfValidMove(Card card) const;
-	void drawSumDraw();
 	void DrawCard();
 	void PlayerUNOdraw();
 	
 	Game(SavedGameSettings& gameSet);
 
-	void GameFlow();
+	bool UpdatePoints();
 
 
 private:
+	void drawSumDraw();
 	void nextPlayer();
-	void BotMove(UINT i, Bot* currentBot);
+	bool BotMove(UINT i, Bot* currentBot);
 	void colorChange(Card* card, Bot* currentBot);
 	void outOfCards();
 	Bot* getCurrentBot();
+	bool WinCheck() const;
+	void resetGame(const bool rndWin);
 };
 

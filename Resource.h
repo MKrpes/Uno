@@ -12,14 +12,6 @@
 #define IDR_UnoGameTYPE                 130
 #define IDD_DIALOG1                     310
 #define IDD_DIALOG2                     318
-#define IDB_WILDCARD_BLUE_CHANGECOLOR   5313
-#define IDB_WILDCARD_BLUE_DRAW4         5314
-#define IDB_WILDCARD_GREEN_CHANGECOLOR  5213
-#define IDB_WILDCARD_GREEN_DRAW4        5214
-#define IDB_WILDCARD_RED_CHANGECOLOR    5013
-#define IDB_WILDCARD_RED_DRAW4          5014
-#define IDB_WILDCARD_YELLOW_CHANGECOLOR 5113
-#define IDB_WILDCARD_YELLOW_DRAW4       5114
 #define IDB_CARD_BACK                   439
 #define IDD_DIALOG3                     440
 #define IDC_SLIDER1                     1000
@@ -33,6 +25,7 @@
 #define IDC_BUTTON2                     1014
 #define IDC_BUTTON3                     1015
 #define IDC_BUTTON4                     1016
+#define IDC_STATIC2                     1017
 #define IDB_RED_0                       5000
 #define IDB_RED_1                       5001
 #define IDB_RED_2                       5002
@@ -46,6 +39,8 @@
 #define IDB_RED_SKIP                    5010
 #define IDB_RED_REVERSE                 5011
 #define IDB_RED_DRAW2                   5012
+#define IDB_WILDCARD_RED_CHANGECOLOR    5013
+#define IDB_WILDCARD_RED_DRAW4          5014
 #define IDB_YELLOW_0                    5100
 #define IDB_YELLOW_1                    5101
 #define IDB_YELLOW_2                    5102
@@ -59,6 +54,8 @@
 #define IDB_YELLOW_SKIP                 5110
 #define IDB_YELLOW_REVERSE              5111
 #define IDB_YELLOW_DRAW2                5112
+#define IDB_WILDCARD_YELLOW_CHANGECOLOR 5113
+#define IDB_WILDCARD_YELLOW_DRAW4       5114
 #define IDB_GREEN_0                     5200
 #define IDB_GREEN_1                     5201
 #define IDB_GREEN_2                     5202
@@ -72,6 +69,8 @@
 #define IDB_GREEN_SKIP                  5210
 #define IDB_GREEN_REVERSE               5211
 #define IDB_GREEN_DRAW2                 5212
+#define IDB_WILDCARD_GREEN_CHANGECOLOR  5213
+#define IDB_WILDCARD_GREEN_DRAW4        5214
 #define IDB_BLUE_0                      5300
 #define IDB_BLUE_1                      5301
 #define IDB_BLUE_2                      5302
@@ -85,6 +84,8 @@
 #define IDB_BLUE_SKIP                   5310
 #define IDB_BLUE_REVERSE                5311
 #define IDB_BLUE_DRAW2                  5312
+#define IDB_WILDCARD_BLUE_CHANGECOLOR   5313
+#define IDB_WILDCARD_BLUE_DRAW4         5314
 #define IDB_WILDCARD_CHANGECOLOR        5413
 #define IDB_WILDCARD_DRAW4              5414
 
@@ -94,7 +95,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        442
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

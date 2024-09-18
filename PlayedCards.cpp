@@ -5,6 +5,11 @@ PlayedCards::PlayedCards(const Card card) {
 	cardHistory.push_back(card);
 }
 
+PlayedCards::~PlayedCards()
+{
+	cardHistory.~vector();
+}
+
 std::vector<Card>& PlayedCards::resetDeck()
 {
 	std::vector<Card> temp(cardHistory.begin(),cardHistory.end()-1);

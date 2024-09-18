@@ -7,6 +7,7 @@
 #include"Game.h"
 #include"Card.h"
 #include"ChooseColorDlg.h"
+#include"RoundWinDlg.h"
 
 #include <future>
 #include <chrono>
@@ -27,7 +28,7 @@ class View :
         CButton SkipButton;
         CButton UnoButton;
         bool isUno = false;
-        CListBox m_ListBox;
+        CListBox playerListBox;
         afx_msg void OnDrawButtonClick();
         afx_msg void OnSkipButtonClick();
         afx_msg void OnUnoButtonClick();
@@ -41,13 +42,14 @@ class View :
         BOOL LoadImagesFromResource();
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
         afx_msg void OnMouseMove(UINT nFlags, CPoint point);    // Handle mouse hover
-        void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage);
+        void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage) const;
 
         
-        void ShowPlayedCard(CDC* pDC, const Card card);
+        void ShowPlayedCard(CDC* pDC, const Card card) const;
         void GetPreviewRect(CRect& previewRect) const;
         void UpdateListBox();
 
+        void ShowWinScreen(int player, const bool rndWin);
         void ShowHand(CDC* pDC);
         void GetHandRect(CRect& previewRect) const;
         BOOL OnEraseBkgnd(CDC* pDC);

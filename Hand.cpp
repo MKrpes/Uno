@@ -16,7 +16,7 @@ Hand::Hand(std::vector<Card> drawnCards) {
 }
 
 Hand::~Hand() {
-	hand.clear();
+	hand.~vector();
 }
 
 void Hand::Sort() {

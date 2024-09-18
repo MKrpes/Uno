@@ -95,7 +95,7 @@ void GameSettings::OnBnClickedOk()
 	if (FullscreenCheck.GetCheck()) {
 		settings->isFullscreen = true;
 	}
-	UINT gameCondition = VictoryConditionEdit.GetDlgItemInt(IDD_DIALOG1);
+	int gameCondition = GetDlgItemInt(IDC_EDIT2);
 	switch (VictoryConditionSelect.GetCurSel()) {
 	case 0:
 		settings->GameType = 0;

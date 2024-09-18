@@ -95,7 +95,6 @@ BOOL CUnoGameApp::InitInstance()
 	GameSettings gameSettingsDlg(&gameSet,nullptr);
 	if(gameSettingsDlg.DoModal() == IDOK) {
 		Game* game=new Game(gameSet);
-		//CFrameWnd* pFrame = new CMainFrame;
 		CMainFrame* pFrame = new CMainFrame;
 		if (!pFrame)
 			return FALSE;
@@ -122,8 +121,8 @@ BOOL CUnoGameApp::InitInstance()
 int CUnoGameApp::ExitInstance()
 {
 	//TODO: handle additional resources you may have added
-	AfxOleTerm(FALSE);
 	GdiplusShutdown(m_gdiplusToken);
+	AfxOleTerm(FALSE);
 
 	return CWinApp::ExitInstance();
 }

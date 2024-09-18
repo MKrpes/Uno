@@ -6,7 +6,7 @@ Game::Game(SavedGameSettings& gameSet) {
 	deck = new Deck();
 	playedCards = new PlayedCards(deck->PopTopNSCard());
 	players.push_back(std::make_unique<Player>(deck->GetStartingHand()));
-	for (uint32_t i=1; i < playerCount; ++i) {
+	for (UINT i=1; i < playerCount; ++i) {
 		players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
 	}
 	switch (gameSet.GameType) {
@@ -17,18 +17,51 @@ Game::Game(SavedGameSettings& gameSet) {
 	case 2: {
 		scBoard = new Scoreboard(playerCount, (types)gameSet.GameType, gameSet.pointsNeeded);
 		break;
+	}default: {
+		scBoard = new Scoreboard(playerCount, (types)0, gameSet.pointsNeeded);
 	}
 	}
 }
 
-void Game::GameFlow()
+bool Game::UpdatePoints()
 {
-	while (currentPlayer != 0) {
-		processMove();
+	switch (scBoard->GetType()) {
+	case 0:
+		return scBoard->WritePoints(currentPlayer);
+	case 1:
+		return scBoard->WritePoints(currentPlayer);
+	case 2:
+	{
+		int pointsSum = 0;
+		for (UINT i = 0; i < playerCount;++i) {
+			for (Card card : players[i]->playerHand->hand) {
+				if (card.getType() < Skip) {
+					pointsSum += card.getType();
+					continue;
+				}
+				else if (card.getType() < ColorChange) {
+					pointsSum += 20;
+					continue;
+				}
+				else if (card.getType() >= ColorChange) {
+					pointsSum += 40;
+					continue;
+				}
+			}
+		}
+		return scBoard->WritePoints(currentPlayer, pointsSum);
+	}
 	}
 }
 
 
+Game::~Game()
+{
+	players.~vector();
+	deck->~Deck();
+	playedCards->~PlayedCards();
+	scBoard->~Scoreboard();
+}
 
 std::vector<Card>& Game::getPlayerhand()
 {
@@ -55,7 +88,7 @@ int Game::validatePlayerMove(int i)
 	
 }
 
-void Game::PlayerMove(const int i, int color)
+bool Game::PlayerMove(const int i, int color)
 {
 	players[0]->hasDrawn = false;
 	if (i != -1) {
@@ -65,10 +98,19 @@ void Game::PlayerMove(const int i, int color)
 			if (playerCount == 2) {
 				playedCards->playerTurn(card);
 				getPlayerhand().erase(getPlayerhand().begin() + i);
+				if (WinCheck()) { return true; }
+				else {
+					return false;
+				}
 			}
 			else {
-				nextPlayer();
-				nextPlayer();
+				if (WinCheck()) { return true; }
+				else {
+					nextPlayer();
+					nextPlayer();
+
+					return false;
+				}				
 			}
 			break;
 		}
@@ -76,56 +118,72 @@ void Game::PlayerMove(const int i, int color)
 			if (playerCount == 2) {
 				playedCards->playerTurn(card);
 				getPlayerhand().erase(getPlayerhand().begin() + i);
+				if (WinCheck()) { return true; }
+				else {
+					return false;
+				}
 			}
 			else {
 				turnOrder = -turnOrder;
 				playedCards->playerTurn(card);
 				getPlayerhand().erase(getPlayerhand().begin() + i);
-				nextPlayer();
+				if (WinCheck()) { return true; }
+				else {
+					nextPlayer();
+					return false;
+				}
 			}
-			break;
 		}
 		case 12: {
 			drawSum += 2;
 			playedCards->playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
-			nextPlayer();
-
-			break;
+			if (WinCheck()) { return true; }
+			else {
+				nextPlayer();
+				return false;
+			}
 		}
 		case 13: {
 			card.Color = (CardColors)color;
 			playedCards->playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
-			nextPlayer();
-
-			break;
+			if (WinCheck()) { return true; }
+			else {
+				nextPlayer();
+				return false;
+			}
 		}
 		case 14: {
 			drawSum += 4;
 			card.Color = (CardColors)color;
 			playedCards->playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
-			nextPlayer();
-
-			break;
+			if (WinCheck()) { return true; }
+			else {
+				nextPlayer();
+				return false;
+			}
 		}default:
 		{
 			playedCards->playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
-			nextPlayer();
-			break;
+			if (WinCheck()) { return true; }
+			else {
+				nextPlayer();
+				return false;		
+			}
 		}
 		}
 
 	}
 	else {
 		nextPlayer();
-
+		return false;
 	}
 }
 
-void Game::processMove() {
+bool Game::processMove() {
 	Bot* currentBot = getCurrentBot();
 	currentBot->hasDrawn = false;
 	int move = currentBot->ReturnHighestPriority(playedCards->getLast(), drawSum);
@@ -142,11 +200,11 @@ void Game::processMove() {
 					nextPlayer();
 				}
 				else {
-					BotMove(move, currentBot);
+					return BotMove(move, currentBot);
 				}
 			}
 			else {
-				BotMove(move, currentBot);
+				return BotMove(move, currentBot);
 			}
 		}
 		else {
@@ -156,13 +214,14 @@ void Game::processMove() {
 				nextPlayer();
 			}
 			else {
-				BotMove(move, currentBot);
+				return BotMove(move, currentBot);
 			}
 		}
 	}
 	else {
-		BotMove(move, currentBot);
+		return BotMove(move, currentBot);
 	}
+	return false;
 }
 
 bool Game::checkIfValidMove(Card card) const{
@@ -224,7 +283,12 @@ Bot* Game::getCurrentBot()
 	
 }
 
-void Game::BotMove(UINT i, Bot* currentBot)
+bool Game::WinCheck() const
+{
+	return players[currentPlayer]->playerHand->hand.empty();
+}
+
+bool Game::BotMove(UINT i, Bot* currentBot)
 {
 	Card card = currentBot->PlayerTurn(i);
 	switch (card.getType()) {
@@ -232,11 +296,13 @@ void Game::BotMove(UINT i, Bot* currentBot)
 		if (playerCount == 2) {
 			currentBot->playerHand->RemoveCard(i);
 			playedCards->playerTurn(card);
+			if (WinCheck()) return true;
 
 		}
 		else {
 			currentBot->playerHand->RemoveCard(i);
 			playedCards->playerTurn(card);
+			if (WinCheck()) return true;
 			nextPlayer();
 			nextPlayer();
 		}
@@ -246,12 +312,14 @@ void Game::BotMove(UINT i, Bot* currentBot)
 		if (playerCount == 2) {
 			currentBot->playerHand->RemoveCard(i);
 			playedCards->playerTurn(card);
+			if (WinCheck()) return true;
 
 		}
 		else {
 			turnOrder = -turnOrder;
 			currentBot->playerHand->RemoveCard(i);
 			playedCards->playerTurn(card);
+			if (WinCheck()) return true;
 			nextPlayer();
 		}
 		break;
@@ -260,6 +328,7 @@ void Game::BotMove(UINT i, Bot* currentBot)
 		drawSum += 2;
 		currentBot->playerHand->RemoveCard(i);
 		playedCards->playerTurn(card);
+		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}
@@ -267,6 +336,7 @@ void Game::BotMove(UINT i, Bot* currentBot)
 		colorChange(&card, currentBot);
 		currentBot->playerHand->RemoveCard(i);
 		playedCards->playerTurn(card);
+		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}
@@ -275,13 +345,37 @@ void Game::BotMove(UINT i, Bot* currentBot)
 		colorChange(&card, currentBot);
 		currentBot->playerHand->RemoveCard(i);
 		playedCards->playerTurn(card);
+		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}default:
 		currentBot->playerHand->RemoveCard(i);
 		playedCards->playerTurn(card);
+		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}
+	return false;
 }
 
+void Game::resetGame(const bool rndWin)
+{
+	deck->~Deck();
+	deck = new Deck();
+	playedCards->~PlayedCards();
+	playedCards = new PlayedCards(deck->PopTopNSCard());
+	for (int i = 0; i < playerCount; ++i) {
+		players[i]->playerHand->~Hand();
+	}
+	//players.push_back(std::make_unique<Player>(deck->GetStartingHand()));
+	for (UINT i = 0; i < playerCount; ++i) {
+		//players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
+		players[i]->playerHand=new Hand(deck->GetStartingHand());
+	}
+	if (!rndWin) {
+		types type = (types)scBoard->GetType();
+		int reqPoints = scBoard->GetReqPoints();
+		scBoard->~Scoreboard();
+		scBoard = new Scoreboard(playerCount, type, reqPoints);
+	}
+}

@@ -7,6 +7,7 @@ Player::Player(const std::vector<Card> cards) {
 
 Player::~Player()
 {
+	playerHand->~Hand();
 }
 
 Card Player::PlayerTurn(int i) {

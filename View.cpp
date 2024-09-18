@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "View.h"
 #include"Resource.h"
-#include <string>
 
 
 IMPLEMENT_DYNCREATE(View, CView)
@@ -18,10 +17,13 @@ END_MESSAGE_MAP()
 
 View::~View()
 {
-    if (!hand_bitmaps.empty())
-    {
-        hand_bitmaps.clear();
-    }
+    hand_bitmaps.~vector();
+    m_imageRects.~vector();
+    DrawButton.~CButton();
+    SkipButton.~CButton();
+    UnoButton.~CButton();
+    //playerListBox.~CListBox();
+    if(game) game->~Game();
 }
 
 
@@ -122,7 +124,7 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     CRect rect(10, 10, 200, 220);
 
     // Create the listbox with necessary styles
-    m_ListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, NULL);
+    playerListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_HASSTRINGS | WS_DISABLED, rect, this, NULL);
     UpdateListBox();
 
     return 0;
@@ -157,11 +159,15 @@ void View::OnSkipButtonClick()
 
         while (game->currentPlayer != 0) {
 
-            game->processMove();
+
+            if (game->processMove()) {
+                ShowWinScreen(game->currentPlayer, game->UpdatePoints());
+                break;
+            }
             UpdateListBox();
             Invalidate();
             UpdateWindow();
-            Sleep(1500);
+            Sleep(750);
         }
     }
 }
@@ -178,51 +184,66 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
         m_hoveredImageIndex < hand_bitmaps.size() &&
         game->currentPlayer == 0)
     {
-        switch (game->validatePlayerMove(m_hoveredImageIndex)) {
-        case -1:{
-            break;
-        }
-        case 0: {
-            game->PlayerMove(m_hoveredImageIndex);
-            m_hoveredImageIndex = 0;
-            Invalidate();
-            break;
-        }
-        case 1: {
-            ChooseColorDlg chooseDlg;
-            if (chooseDlg.DoModal() == IDOK) {
-                int color = chooseDlg.getChosenColor();
-                game->PlayerMove(m_hoveredImageIndex,color);
-                m_hoveredImageIndex = 0;
-                Invalidate();
-            }
-            break;
-        }
-        }
-
-        if (!isUno && game->getPlayerhand().size() <= 1) {
+        if (!isUno && game->getPlayerhand().size() <= 2) {
             AfxMessageBox(_T("Uno not called"));
             game->PlayerUNOdraw();
             Invalidate();
-        }
-        UpdateListBox();
-
-        isUno = false;
-        while (game->currentPlayer != 0) {
-
-            game->processMove();
-            UpdateListBox();
-            //Sleep(5);
-            Invalidate();  
             UpdateWindow();
-            Sleep(1500);
         }
-        UpdateListBox();
+        else {
+            isUno = false;
+            switch (game->validatePlayerMove(m_hoveredImageIndex)) {
+            case -1: {
+                break;
+            }
+            case 0: {
 
+                if (game->PlayerMove(m_hoveredImageIndex)) {
+                    ShowWinScreen(game->currentPlayer, game->UpdatePoints());
+                    break;
+                }
+
+                m_hoveredImageIndex = -1;
+                Invalidate();
+                break;
+            }
+            case 1: {
+                ChooseColorDlg chooseDlg;
+                if (chooseDlg.DoModal() == IDOK) {
+                    int color = chooseDlg.getChosenColor();
+                    if (game->PlayerMove(m_hoveredImageIndex, color)) {
+                        ShowWinScreen(game->currentPlayer, game->UpdatePoints());
+                        break;
+                    }
+
+                    m_hoveredImageIndex = -1;
+                    Invalidate();
+                }
+                break;
+            }
+            }
+
+
+            UpdateListBox();
+
+
+            while (game->currentPlayer != 0) {
+
+                if (game->processMove()) {
+                    ShowWinScreen(game->currentPlayer, game->UpdatePoints());
+                    break;
+                }
+                UpdateListBox();
+                Invalidate();
+                UpdateWindow();
+                Sleep(750);
+            }
+            UpdateListBox();
+        }
     }
 }
 
-void View::ShowPlayedCard(CDC* pDC,const Card card) {
+void View::ShowPlayedCard(CDC* pDC,const Card card) const {
     HMODULE hModule = AfxGetInstanceHandle();
     Gdiplus::Bitmap* pImage = Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.getColor() * 100 + card.getType()));
 
@@ -242,9 +263,6 @@ void View::ShowPlayedCard(CDC* pDC,const Card card) {
         graphics.DrawImage(pImage, xOffset, yOffset, previewWidth, previewHeight);
     }
     else {
-        CString str;
-        str.Format(_T("card: c %d,t %d not found"), card.Color,card.Type);
-        AfxMessageBox(str);
     }
 }
 
@@ -295,7 +313,7 @@ void View::OnDraw(CDC* pDC)
 }
 
 
-void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)
+void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)const 
 {
     if (pImage)
     {
@@ -335,17 +353,19 @@ void View::GetPreviewRect(CRect& previewRect) const
 
 void View::UpdateListBox()
 {
-    m_ListBox.ResetContent();
+    playerListBox.ResetContent();
     CString str;
-    str.Format(_T("You: %d"), game->getPlayerhand().size());
-    m_ListBox.AddString(str);
+    str.Format(_T("You: %u , %d"), game->getPlayerhand().size(),game->scBoard->GetPlayerPoints(0));
+    playerListBox.AddString(str);
     for (UINT i = 1; i < game->playerCount; ++i) {
-        str.Format(_T("opponent %d: %d"), i, game->players[i]->playerHand->hand.size());
-        m_ListBox.AddString(str);
+        str.Format(_T("opponent %u: %u , %d"), i, game->players[i]->playerHand->hand.size(), game->scBoard->GetPlayerPoints(i));
+        playerListBox.AddString(str);
     }
-    m_ListBox.SetCurSel(game->currentPlayer);
+    playerListBox.SetCurSel(game->currentPlayer);
 
 }
+
+
 
 void View::ShowHand(CDC* pDC)
 {
@@ -437,3 +457,21 @@ BOOL View::OnEraseBkgnd(CDC* pDC)
     return TRUE;
 }
 
+void View::ShowWinScreen(int player, const bool rndWin)
+{
+    //RoundWinDlg rwDlg=new RoundWinDlg(nullptr,player,rndWin);
+    RoundWinDlg rwDlg(player,rndWin,nullptr);
+    if (rwDlg.DoModal() == IDOK) {
+
+        game->resetGame(rndWin);
+        Invalidate();
+        UpdateWindow();
+        UpdateListBox();
+        return;
+    }
+    else {
+        this->~View();
+        AfxGetMainWnd()->PostMessage(WM_CLOSE);
+    }
+
+}
