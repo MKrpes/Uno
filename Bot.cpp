@@ -68,11 +68,26 @@ std::map<CardColors, UINT> Bot::ColorCount(bool countsWildcards)
 			}
 		}
 	}
-	return colorCount;
+	if (!colorCount.empty()) {
+		return colorCount;
+	}
+	else {
+		colorCount[Red] = 1;
+		return colorCount;
+	}
 }
 
 CardColors Bot::ChooseColorToChange()
 {
-	return ColorCount(false).begin()->first;
+	std::map<CardColors, UINT> colorCount;
+	colorCount = ColorCount(false);
+	UINT mostCards = colorCount.begin()->second;
+	CardColors cc = colorCount.begin()->first;
+	for (const auto& pair : colorCount) {
+		if (pair.second > colorCount[cc]) {
+			cc = pair.first;
+		}
+	}
+	return cc;
 }
 

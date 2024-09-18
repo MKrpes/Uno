@@ -10,9 +10,10 @@ PlayedCards::~PlayedCards()
 	cardHistory.~vector();
 }
 
-std::vector<Card>& PlayedCards::resetDeck()
+std::vector<Card> PlayedCards::resetDeck()
 {
-	std::vector<Card> temp(cardHistory.begin(),cardHistory.end()-1);
+	std::vector<Card> temp;
+	temp.assign(cardHistory.begin(), cardHistory.end() - 1);
 	cardHistory.erase(cardHistory.begin(), cardHistory.end() - 1);
 	return temp;
 

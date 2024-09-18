@@ -48,11 +48,11 @@ bool Scoreboard::WritePoints(const int player,const int pointsSum)
 		return true;
 	case 1: {
 		points[player] += 1;
-		return points[player] > requiredPoints;
+		return points[player] < requiredPoints;
 	}
 	case 2: {
 		points[player] += pointsSum;
-		return points[player] > requiredPoints;
+		return points[player] < requiredPoints;
 	}
 	}
 }

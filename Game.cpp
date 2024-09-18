@@ -274,6 +274,7 @@ void Game::drawSumDraw()
 
 void Game::outOfCards()
 {
+	deck->~Deck();
 	deck = new Deck(playedCards->resetDeck());
 }
 
@@ -360,6 +361,7 @@ bool Game::BotMove(UINT i, Bot* currentBot)
 
 void Game::resetGame(const bool rndWin)
 {
+	currentPlayer = 0;
 	deck->~Deck();
 	deck = new Deck();
 	playedCards->~PlayedCards();
@@ -367,9 +369,7 @@ void Game::resetGame(const bool rndWin)
 	for (int i = 0; i < playerCount; ++i) {
 		players[i]->playerHand->~Hand();
 	}
-	//players.push_back(std::make_unique<Player>(deck->GetStartingHand()));
 	for (UINT i = 0; i < playerCount; ++i) {
-		//players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
 		players[i]->playerHand=new Hand(deck->GetStartingHand());
 	}
 	if (!rndWin) {

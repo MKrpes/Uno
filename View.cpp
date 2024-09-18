@@ -11,18 +11,13 @@ BEGIN_MESSAGE_MAP(View, CView)
     ON_BN_CLICKED(1003, &View::OnUnoButtonClick)
     ON_WM_LBUTTONDOWN()
     ON_WM_MOUSEMOVE()
+    ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
 
 View::~View()
 {
-    hand_bitmaps.~vector();
-    m_imageRects.~vector();
-    DrawButton.~CButton();
-    SkipButton.~CButton();
-    UnoButton.~CButton();
-    //playerListBox.~CListBox();
     if(game) game->~Game();
 }
 
@@ -30,7 +25,6 @@ View::~View()
 void View::OnInitialUpdate()
 {
     CView::OnInitialUpdate();
-
     // Load the image from the resource using GDI+ Bitmap::FromResource
     if (!LoadImagesFromResource())
     {
@@ -44,7 +38,6 @@ void View::OnInitialUpdate()
 BOOL View::LoadImagesFromResource()
 {
     HMODULE hModule = AfxGetInstanceHandle();
-    // Clear existing images
     for (auto img : hand_bitmaps)
     {
         delete img;
@@ -156,19 +149,8 @@ void View::OnSkipButtonClick()
     if (game->currentPlayer == 0 && game->players[0]->hasDrawn)
     {
         game->PlayerMove(-1);
+        ::SetTimer(*this, MyTimerId, 1250, NULL);
 
-        while (game->currentPlayer != 0) {
-
-
-            if (game->processMove()) {
-                ShowWinScreen(game->currentPlayer, game->UpdatePoints());
-                break;
-            }
-            UpdateListBox();
-            Invalidate();
-            UpdateWindow();
-            Sleep(750);
-        }
     }
 }
 
@@ -194,7 +176,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             isUno = false;
             switch (game->validatePlayerMove(m_hoveredImageIndex)) {
             case -1: {
-                break;
+                break; //invalid move, nothing happens
             }
             case 0: {
 
@@ -223,22 +205,10 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             }
             }
 
-
-            UpdateListBox();
-
-
-            while (game->currentPlayer != 0) {
-
-                if (game->processMove()) {
-                    ShowWinScreen(game->currentPlayer, game->UpdatePoints());
-                    break;
-                }
-                UpdateListBox();
-                Invalidate();
-                UpdateWindow();
-                Sleep(750);
+            if (game->currentPlayer != 0) {
+                ::SetTimer(*this, MyTimerId, 1250, NULL);
             }
-            UpdateListBox();
+
         }
     }
 }
@@ -273,7 +243,7 @@ void View::loadGame(Game* gm)
 
 void View::OnDraw(CDC* pDC)
 {
-
+    
     // Create a memory DC to perform double buffering
     CRect clientRect;
     GetClientRect(&clientRect);
@@ -358,7 +328,7 @@ void View::UpdateListBox()
     str.Format(_T("You: %u , %d"), game->getPlayerhand().size(),game->scBoard->GetPlayerPoints(0));
     playerListBox.AddString(str);
     for (UINT i = 1; i < game->playerCount; ++i) {
-        str.Format(_T("opponent %u: %u , %d"), i, game->players[i]->playerHand->hand.size(), game->scBoard->GetPlayerPoints(i));
+        str.Format(_T("%u. opponent: %u , %d"), i, game->players[i]->playerHand->hand.size(), game->scBoard->GetPlayerPoints(i));
         playerListBox.AddString(str);
     }
     playerListBox.SetCurSel(game->currentPlayer);
@@ -457,6 +427,8 @@ BOOL View::OnEraseBkgnd(CDC* pDC)
     return TRUE;
 }
 
+
+
 void View::ShowWinScreen(int player, const bool rndWin)
 {
     //RoundWinDlg rwDlg=new RoundWinDlg(nullptr,player,rndWin);
@@ -474,4 +446,26 @@ void View::ShowWinScreen(int player, const bool rndWin)
         AfxGetMainWnd()->PostMessage(WM_CLOSE);
     }
 
+}
+
+void View::OnTimer(UINT_PTR timerId)
+{
+    if(game->currentPlayer != 0) {
+
+        if (game->processMove()) {
+            KillTimer(timerId);
+            ShowWinScreen(game->currentPlayer, game->UpdatePoints());
+            UpdateListBox();
+            Invalidate();
+            UpdateWindow();
+            return;
+        }
+        UpdateListBox();
+        Invalidate();
+        UpdateWindow();
+    }
+    else {
+        KillTimer(timerId);
+    }
+    CView::OnTimer(timerId);
 }

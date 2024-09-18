@@ -9,9 +9,6 @@
 #include"ChooseColorDlg.h"
 #include"RoundWinDlg.h"
 
-#include <future>
-#include <chrono>
-
 
 class View :
     public CView
@@ -41,6 +38,7 @@ class View :
 
         BOOL LoadImagesFromResource();
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+        afx_msg void   OnTimer(UINT_PTR id);
         afx_msg void OnMouseMove(UINT nFlags, CPoint point);    // Handle mouse hover
         void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage) const;
 
@@ -54,6 +52,6 @@ class View :
         void GetHandRect(CRect& previewRect) const;
         BOOL OnEraseBkgnd(CDC* pDC);
         DECLARE_MESSAGE_MAP()
-
+        int MyTimerId{ 1 };
 };
 

@@ -8,31 +8,37 @@ Deck::Deck(const Deck& other) : deck(other.deck) {
 			card.Color = Wildcard;
 		}
 	}
-	Shuffle(); }
+	Shuffle(); 
+}
 
 Deck::Deck() {
 	//generates cards that appear only once (number 0 cards)
-	for(int i = 50; i < 54; ++i) {
-			deck.push_back(Card((CardColors)i, (CardTypes)0));
+	for(int i = Red; i < Wildcard; ++i) {
+			deck.push_back(Card((CardColors)i, ZERO));
 	}
 	//generates cards that appear twice (numbers, skip, reverse and draw two)
 	for (int n = 0; n < 2; ++n) {
-		for (int i = 50; i < 54; ++i) {
-			for (int j = 1; j < 13; ++j) {
+		for (int i = Red; i < Wildcard; ++i) {
+			for (int j = ONE; j < ColorChange; ++j) {
 				deck.push_back(Card((CardColors)i, (CardTypes)j));
 			}
 		}
 	}
 	//generates wildcards (4 of color change and draw four each)
 	for (int n = 0; n < 4; ++n) {
-		for (int i = 13; i < 15; ++i) {
-			deck.push_back(Card((CardColors)54, (CardTypes)i));
+		for (int i = ColorChange; i <=DrawFour ; ++i) {
+			deck.push_back(Card(Wildcard, (CardTypes)i));
 		}
 	}
 	Shuffle();
 }
-Deck::Deck(const std::vector<Card>& other) {
+Deck::Deck(const std::vector<Card> other) {
 	deck = other;
+	for (Card card : deck) {
+		if (card.getType() == DrawFour || card.getType() == ColorChange) {
+			card.Color = Wildcard;
+		}
+	}
 	Shuffle();
 }
 
