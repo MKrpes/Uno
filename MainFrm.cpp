@@ -32,7 +32,6 @@ CMainFrame::CMainFrame() noexcept
 
 CMainFrame::~CMainFrame()
 {
-	m_wndView.~View();
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -41,7 +40,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// create a view to occupy the client area of the frame
-	if (!m_wndView.Create(nullptr, nullptr, AFX_WS_DEFAULT_VIEW,
+	if (!m_wndView->Create(nullptr, nullptr, AFX_WS_DEFAULT_VIEW,
 		CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, nullptr))
 	{
 		TRACE0("Failed to create view window\n");
@@ -49,6 +48,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	return 0;
 }
+
+//CMainFrame::CMainFrame(Game gm) : m_wndView(gm){
+//}
+CMainFrame::CMainFrame(Game gm){
+	m_wndView = new View(gm);
+}
+
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -82,13 +88,13 @@ void CMainFrame::Dump(CDumpContext& dc) const
 void CMainFrame::OnSetFocus(CWnd* /*pOldWnd*/)
 {
 	// forward focus to the view window
-	m_wndView.SetFocus();
+	m_wndView->SetFocus();
 }
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
 	// let the view have first crack at the command
-	if (m_wndView.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+	if (m_wndView->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
 	// otherwise, do default handling
@@ -103,8 +109,9 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	lpMMI->ptMinTrackSize.x = 800;  // Minimum width
 	lpMMI->ptMinTrackSize.y = 600;  // Minimum height
 
+
 }
 void CMainFrame::OnClose() {
-	AfxGetMainWnd()->PostMessage(WM_CLOSE); // Exit the message loop and clean up
 	CFrameWnd::OnClose();  // Call the base class to ensure proper handling
+
 }

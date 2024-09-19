@@ -188,7 +188,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Bot.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="ChooseColorDlg.h" />
     <ClInclude Include="Deck.h" />
@@ -209,7 +208,6 @@
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bot.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="ChooseColorDlg.cpp" />
     <ClCompile Include="Deck.cpp" />

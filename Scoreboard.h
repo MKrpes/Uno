@@ -17,11 +17,12 @@ class Scoreboard
 	bool WritePoints(const int player, const int pointsSum = 1);
 
 public:
-	Scoreboard(const int playerCount,const types type,const int rPoints=5);
+	Scoreboard() {};
+	Scoreboard(int playerCount,types type,int rPoints=5);
 	std::map<int, int> GetPoints() const;
 	int GetType() const;
 	int GetReqPoints() const;
 	int GetPlayerPoints(const int i);
-	~Scoreboard();
+	~Scoreboard() {};
 };
 

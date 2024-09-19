@@ -8,7 +8,8 @@ class Hand
 public:
 	std::vector<Card> hand;
 	Hand(std::vector<Card> drawnCards);
-	~Hand();
+	Hand() {};
+	~Hand() {};
 	void Sort();
 	void RemoveCard(UINT i);
 	void AddCard(const Card card);

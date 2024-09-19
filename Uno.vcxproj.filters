@@ -48,9 +48,6 @@
     <ClInclude Include="ChooseColorDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Card.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,9 +93,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChooseColorDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Card.cpp">

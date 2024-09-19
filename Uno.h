@@ -26,7 +26,6 @@ public:
 	CUnoGameApp() noexcept;
 	ULONG_PTR m_gdiplusToken;
 	SavedGameSettings gameSet;
-	//Game game;
 
 // Overrides
 public:

@@ -5,6 +5,7 @@
 #pragma once
 //#include "ChildView.h"
 #include "View.h"
+#include"Game.h"
 
 class CMainFrame : public CFrameWnd
 {
@@ -22,6 +23,7 @@ public:
 
 // Overrides
 public:
+	CMainFrame(Game gm);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
@@ -34,7 +36,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	View m_wndView;
+	View* m_wndView;
 
 // Generated message map functions
 protected:
@@ -42,6 +44,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnClose();
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
+	//void OnDestroy();
 	DECLARE_MESSAGE_MAP()
 
 };

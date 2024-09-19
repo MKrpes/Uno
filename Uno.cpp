@@ -94,12 +94,11 @@ BOOL CUnoGameApp::InitInstance()
 
 	GameSettings gameSettingsDlg(&gameSet,nullptr);
 	if(gameSettingsDlg.DoModal() == IDOK) {
-		Game* game=new Game(gameSet);
-		CMainFrame* pFrame = new CMainFrame;
+		Game game(gameSet);
+		CMainFrame* pFrame = new CMainFrame(game);
 		if (!pFrame)
 			return FALSE;
-		m_pMainWnd = pFrame;
-		pFrame->m_wndView.loadGame(game);
+		m_pMainWnd=pFrame;
 		pFrame->LoadFrame(IDR_MAINFRAME,
 			WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
 			nullptr);
@@ -113,7 +112,6 @@ BOOL CUnoGameApp::InitInstance()
 		}
 		pFrame->UpdateWindow();
 		return TRUE;
-
 	}
 	else {
 		return FALSE;

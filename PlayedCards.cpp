@@ -5,9 +5,7 @@ PlayedCards::PlayedCards(const Card card) {
 	cardHistory.push_back(card);
 }
 
-PlayedCards::~PlayedCards()
-{
-	cardHistory.~vector();
+PlayedCards::~PlayedCards(){
 }
 
 std::vector<Card> PlayedCards::resetDeck()
@@ -24,5 +22,11 @@ void PlayedCards::playerTurn(const Card card) {
 }
 const Card PlayedCards::getLast() {
 	return cardHistory.back();
+}
+
+void PlayedCards::newGame(const Card card)
+{
+	cardHistory.clear();
+	cardHistory.push_back(card);
 }
 

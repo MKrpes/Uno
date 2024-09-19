@@ -15,9 +15,6 @@ Hand::Hand(std::vector<Card> drawnCards) {
 	Sort();
 }
 
-Hand::~Hand() {
-	hand.~vector();
-}
 
 void Hand::Sort() {
 	std::sort(hand.begin(), hand.end(), compareCards);

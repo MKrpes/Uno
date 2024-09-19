@@ -13,13 +13,15 @@
 class View :
     public CView
 {
+    DECLARE_DYNCREATE(View)
     public:
-        Game* game;
-        void loadGame(Game* gm);
-        virtual void OnDraw(CDC* pDC);  // Override to perform drawing
+        Game game;
+        virtual void OnDraw(CDC* pDC);
+        
+        View(Game game);
         View() {};
-        ~View();
-        DECLARE_DYNCREATE(View)
+        ~View() {};
+        
         afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
         CButton DrawButton;
         CButton SkipButton;
@@ -35,12 +37,11 @@ class View :
         int m_hoveredImageIndex = -1;
 
 
-
         BOOL LoadImagesFromResource();
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
         int MyTimerId{ 1 };
         afx_msg void OnTimer(UINT_PTR id);
-        afx_msg void OnMouseMove(UINT nFlags, CPoint point);    // Handle mouse hover
+        afx_msg void OnMouseMove(UINT nFlags, CPoint point);
         void ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage) const;
 
         

@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Scoreboard.h"
 
-Scoreboard::Scoreboard(const int playerCount,const types gameType,const int rPoints){
+Scoreboard::Scoreboard(int playerCount,types gameType,int rPoints){
 	requiredPoints = rPoints;
 	type = gameType;
+	if (type == 2) { requiredPoints*=100; }
 	for (int i = 0; i < playerCount; ++i) {
 		points[i] = 0;
 	}
@@ -29,10 +30,6 @@ int Scoreboard::GetPlayerPoints(const int i)
 	return points[i];
 }
 
-Scoreboard::~Scoreboard()
-{
-	points.clear();
-}
 
 void Scoreboard::resetScoreboard()
 {

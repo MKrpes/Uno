@@ -5,10 +5,7 @@
 
 #include "Card.h"
 
-class Deck
-	{
-
-	
+class Deck{
 
 public:
 	Deck();
@@ -22,5 +19,7 @@ public:
 	Deck(const std::vector<Card> other);
 	~Deck();
 	void Shuffle();
+	void Reset(const std::vector<Card> other);
+	void newGame();
 };
 

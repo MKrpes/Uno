@@ -3,11 +3,10 @@
 #include"Player.h"
 
 
-
 int Bot::ReturnHighestPriority(Card card, int drawsum)
 {
 	if (drawsum == 0) {
-		std::vector<UINT> possibleMoves = playerHand->CheckForAvailableCards(card);
+		std::vector<UINT> possibleMoves = playerHand.CheckForAvailableCards(card);
 		if (possibleMoves.empty()) { //no possible moves, draws card
 			return -1;
 		}
@@ -18,8 +17,8 @@ int Bot::ReturnHighestPriority(Card card, int drawsum)
 			std::map<CardColors, UINT> colorCount = ColorCount();
 			UINT choice = possibleMoves[0];
 			for (UINT i : possibleMoves) {
-				if (playerHand->hand.at(i).getType() > playerHand->hand.at(choice).getType() &&
-					colorCount[playerHand->hand.at(i).getColor()]> colorCount[playerHand->hand.at(choice).getColor()]) {
+				if (playerHand.hand.at(i).getType() > playerHand.hand.at(choice).getType() &&
+					colorCount[playerHand.hand.at(i).getColor()]> colorCount[playerHand.hand.at(choice).getColor()]) {
 
 						choice = i;
 				}
@@ -28,7 +27,7 @@ int Bot::ReturnHighestPriority(Card card, int drawsum)
 		}
 	}
 	else {
-		std::vector<UINT> possibleMoves = playerHand->CheckForStackingCards(card);
+		std::vector<UINT> possibleMoves = playerHand.CheckForStackingCards(card);
 		if (possibleMoves.empty()) { //no possible moves, draws card
 			return -1;
 		}
@@ -39,8 +38,8 @@ int Bot::ReturnHighestPriority(Card card, int drawsum)
 			std::map<CardColors, UINT> colorCount = ColorCount();
 			UINT choice = possibleMoves[0];
 			for (UINT i : possibleMoves) {
-				if (playerHand->hand.at(i).getType() > playerHand->hand.at(choice).getType() &&
-					colorCount[playerHand->hand.at(i).getColor()] > colorCount[playerHand->hand.at(choice).getColor()]) {
+				if (playerHand.hand.at(i).getType() > playerHand.hand.at(choice).getType() &&
+					colorCount[playerHand.hand.at(i).getColor()] > colorCount[playerHand.hand.at(choice).getColor()]) {
 						choice = i;
 				}
 			}
@@ -53,13 +52,13 @@ std::map<CardColors, UINT> Bot::ColorCount(bool countsWildcards)
 {
 	std::map<CardColors, UINT> colorCount;
 	if (countsWildcards) {
-		for (Card i : playerHand->hand) {
+		for (Card i : playerHand.hand) {
 			colorCount[i.getColor()]++;
 		}
 	}
 	else
 	{
-		for (Card i : playerHand->hand) {
+		for (Card i : playerHand.hand) {
 			if (i.getColor() != Wildcard) {
 				colorCount[i.getColor()]++;
 			}

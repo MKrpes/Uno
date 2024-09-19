@@ -15,11 +15,7 @@ GameSettings::GameSettings(SavedGameSettings* gmSet, CWnd* pParent /*=nullptr*/)
 {
 	settings = gmSet;
 }
-//
-//GameSettings::GameSettings(SavedGameSettings& gameSet)
-//{
-//	gmSet = gameSet;
-//}
+
 
 GameSettings::~GameSettings()
 {
@@ -36,7 +32,7 @@ void GameSettings::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK1, FullscreenCheck);
 
 	DDX_Control(pDX, IDC_COMBO1, VictoryConditionSelect);
-	VictoryConditionSelect.AddString("None");
+	VictoryConditionSelect.AddString("Single match");
 	VictoryConditionSelect.AddString("Match wins");
 	VictoryConditionSelect.AddString("Points");
 	VictoryConditionSelect.SelectString(0, "None");
@@ -98,14 +94,14 @@ void GameSettings::OnBnClickedOk()
 	int gameCondition = GetDlgItemInt(IDC_EDIT2);
 	switch (VictoryConditionSelect.GetCurSel()) {
 	case 0:
-		settings->GameType = 0;
+		settings->GameType = (types)0;
 		break;
 	case 1:
-		settings->GameType = 1;
+		settings->GameType = (types)1;
 		if (gameCondition != 0) settings->winsNeeded = gameCondition;
 		break;
 	case 2:
-		settings->GameType = 2;
+		settings->GameType = (types)2;
 		if (gameCondition != 0) settings->pointsNeeded = gameCondition;
 		break;
 	}

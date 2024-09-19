@@ -13,28 +13,29 @@ class Game
 {
 	friend class View;
 public:
-	std::vector<std::unique_ptr<Player>> players;
+	std::vector<Player> players;
 	int turnOrder = 1;
 	int currentPlayer = 0;
 	UINT playerCount;
 	UINT drawSum=0;
 
 
-	Scoreboard* scBoard;
-	Deck* deck;
-	PlayedCards* playedCards;
-	
-	~Game();
-	
+	Scoreboard scBoard;
+	Deck deck;
+	PlayedCards playedCards;
+
+	Game() {};
+	~Game() {};
+
 	std::vector<Card>& getPlayerhand();
 	
 	int validatePlayerMove(int i);
 	bool PlayerMove(const int i,int color=0);
 	bool processMove();
-	bool checkIfValidMove(Card card) const;
+	bool checkIfValidMove(const Card card);
 	void DrawCard();
 	void PlayerUNOdraw();
-	
+
 	Game(SavedGameSettings& gameSet);
 
 	bool UpdatePoints();
@@ -43,11 +44,12 @@ public:
 private:
 	void drawSumDraw();
 	void nextPlayer();
-	bool BotMove(UINT i, Bot* currentBot);
-	void colorChange(Card* card, Bot* currentBot);
 	void outOfCards();
-	Bot* getCurrentBot();
+	
 	bool WinCheck() const;
 	void resetGame(const bool rndWin);
+
+	bool BotMove(UINT i);
+	void colorChange(Card* card);
 };
 

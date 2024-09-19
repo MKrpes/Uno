@@ -1,40 +1,28 @@
 #include "pch.h"
 #include "Game.h"
 
-Game::Game(SavedGameSettings& gameSet) {
-	playerCount = gameSet.playerCount;
-	deck = new Deck();
-	playedCards = new PlayedCards(deck->PopTopNSCard());
-	players.push_back(std::make_unique<Player>(deck->GetStartingHand()));
-	for (UINT i=1; i < playerCount; ++i) {
-		players.push_back(std::make_unique<Bot>(deck->GetStartingHand()));
-	}
-	switch (gameSet.GameType) {
-	case 1: {
-		scBoard = new Scoreboard(playerCount, (types)gameSet.GameType, gameSet.winsNeeded);
-		break;
-	}
-	case 2: {
-		scBoard = new Scoreboard(playerCount, (types)gameSet.GameType, gameSet.pointsNeeded);
-		break;
-	}default: {
-		scBoard = new Scoreboard(playerCount, (types)0, gameSet.pointsNeeded);
-	}
+Game::Game(SavedGameSettings& gameSet) : deck(), playedCards(deck.PopTopNSCard()),
+playerCount(gameSet.playerCount), scBoard(playerCount,gameSet.GameType,gameSet.pointsNeeded)
+
+{
+	for (UINT i = 0; i < playerCount; ++i) {
+		players.push_back(Player(deck.GetStartingHand()));
 	}
 }
 
+
 bool Game::UpdatePoints()
 {
-	switch (scBoard->GetType()) {
+	switch (scBoard.GetType()) {
 	case 0:
-		return scBoard->WritePoints(currentPlayer);
+		return scBoard.WritePoints(currentPlayer);
 	case 1:
-		return scBoard->WritePoints(currentPlayer);
+		return scBoard.WritePoints(currentPlayer);
 	case 2:
 	{
 		int pointsSum = 0;
-		for (UINT i = 0; i < playerCount;++i) {
-			for (Card card : players[i]->playerHand->hand) {
+		for (UINT i = 0; i < playerCount; ++i) {
+			for (Card card : players[i].playerHand.hand) {
 				if (card.getType() < Skip) {
 					pointsSum += card.getType();
 					continue;
@@ -49,29 +37,22 @@ bool Game::UpdatePoints()
 				}
 			}
 		}
-		return scBoard->WritePoints(currentPlayer, pointsSum);
+		return scBoard.WritePoints(currentPlayer, pointsSum);
 	}
 	}
 }
 
 
-Game::~Game()
-{
-	players.~vector();
-	deck->~Deck();
-	playedCards->~PlayedCards();
-	scBoard->~Scoreboard();
-}
 
 std::vector<Card>& Game::getPlayerhand()
 {
-	return players[0]->playerHand->hand;
+	return players[0].playerHand.hand;
 }
 
 void Game::nextPlayer() {
 	currentPlayer = currentPlayer + turnOrder;
-	if (currentPlayer >= (int)playerCount) { currentPlayer = 0; return;}
-	if (currentPlayer < 0) { currentPlayer = playerCount - 1; return;}
+	if (currentPlayer >= (int)playerCount) { currentPlayer = 0; return; }
+	if (currentPlayer < 0) { currentPlayer = playerCount - 1; return; }
 }
 
 
@@ -85,18 +66,18 @@ int Game::validatePlayerMove(int i)
 		return 0; //normal valid move
 	}
 	else return -1; //invalid move
-	
+
 }
 
 bool Game::PlayerMove(const int i, int color)
 {
-	players[0]->hasDrawn = false;
+	players[0].hasDrawn = false;
 	if (i != -1) {
 		Card card = getPlayerhand()[i];
 		switch (card.getType()) {
-		case 10: {
+		case Skip: {
 			if (playerCount == 2) {
-				playedCards->playerTurn(card);
+				playedCards.playerTurn(card);
 				getPlayerhand().erase(getPlayerhand().begin() + i);
 				if (WinCheck()) { return true; }
 				else {
@@ -106,17 +87,19 @@ bool Game::PlayerMove(const int i, int color)
 			else {
 				if (WinCheck()) { return true; }
 				else {
+					playedCards.playerTurn(card);
+					getPlayerhand().erase(getPlayerhand().begin() + i);
 					nextPlayer();
 					nextPlayer();
 
 					return false;
-				}				
+				}
 			}
 			break;
 		}
-		case 11: {
+		case Reverse: {
 			if (playerCount == 2) {
-				playedCards->playerTurn(card);
+				playedCards.playerTurn(card);
 				getPlayerhand().erase(getPlayerhand().begin() + i);
 				if (WinCheck()) { return true; }
 				else {
@@ -125,7 +108,7 @@ bool Game::PlayerMove(const int i, int color)
 			}
 			else {
 				turnOrder = -turnOrder;
-				playedCards->playerTurn(card);
+				playedCards.playerTurn(card);
 				getPlayerhand().erase(getPlayerhand().begin() + i);
 				if (WinCheck()) { return true; }
 				else {
@@ -134,9 +117,9 @@ bool Game::PlayerMove(const int i, int color)
 				}
 			}
 		}
-		case 12: {
+		case DrawTwo: {
 			drawSum += 2;
-			playedCards->playerTurn(card);
+			playedCards.playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
 			if (WinCheck()) { return true; }
 			else {
@@ -144,9 +127,9 @@ bool Game::PlayerMove(const int i, int color)
 				return false;
 			}
 		}
-		case 13: {
+		case ColorChange: {
 			card.Color = (CardColors)color;
-			playedCards->playerTurn(card);
+			playedCards.playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
 			if (WinCheck()) { return true; }
 			else {
@@ -154,10 +137,10 @@ bool Game::PlayerMove(const int i, int color)
 				return false;
 			}
 		}
-		case 14: {
+		case DrawFour: {
 			drawSum += 4;
 			card.Color = (CardColors)color;
-			playedCards->playerTurn(card);
+			playedCards.playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
 			if (WinCheck()) { return true; }
 			else {
@@ -166,12 +149,12 @@ bool Game::PlayerMove(const int i, int color)
 			}
 		}default:
 		{
-			playedCards->playerTurn(card);
+			playedCards.playerTurn(card);
 			getPlayerhand().erase(getPlayerhand().begin() + i);
 			if (WinCheck()) { return true; }
 			else {
 				nextPlayer();
-				return false;		
+				return false;
 			}
 		}
 		}
@@ -184,49 +167,48 @@ bool Game::PlayerMove(const int i, int color)
 }
 
 bool Game::processMove() {
-	Bot* currentBot = getCurrentBot();
-	currentBot->hasDrawn = false;
-	int move = currentBot->ReturnHighestPriority(playedCards->getLast(), drawSum);
-	if (move==-1) {
+	players[currentPlayer].hasDrawn = false;
+	int move = players[currentPlayer].ReturnHighestPriority(playedCards.getLast(), drawSum);
+	if (move == -1) {
 		if (drawSum != 0) {
 
 			drawSumDraw();
-			move = currentBot->ReturnHighestPriority(playedCards->getLast());
+			move = players[currentPlayer].ReturnHighestPriority(playedCards.getLast());
 			if (move == -1) {
 
 				DrawCard();
-				move = currentBot->ReturnHighestPriority(playedCards->getLast());
+				move = players[currentPlayer].ReturnHighestPriority(playedCards.getLast());
 				if (move == -1) {
 					nextPlayer();
 				}
 				else {
-					return BotMove(move, currentBot);
+					return BotMove(move);
 				}
 			}
 			else {
-				return BotMove(move, currentBot);
+				return BotMove(move);
 			}
 		}
 		else {
 			DrawCard();
-			move = currentBot->ReturnHighestPriority(playedCards->getLast());
-			if(move == -1) {
+			move = players[currentPlayer].ReturnHighestPriority(playedCards.getLast());
+			if (move == -1) {
 				nextPlayer();
 			}
 			else {
-				return BotMove(move, currentBot);
+				return BotMove(move);
 			}
 		}
 	}
 	else {
-		return BotMove(move, currentBot);
+		return BotMove(move);
 	}
 	return false;
 }
 
-bool Game::checkIfValidMove(Card card) const{
-	if (playedCards->getLast().Color == card.getColor() ||
-		playedCards->getLast().Type == card.getType() ||
+bool Game::checkIfValidMove(const Card card) {
+	if (playedCards.getLast().getColor() == card.getColor() ||
+		playedCards.getLast().getType() == card.getType() ||
 		card.getColor() == Wildcard) {
 
 		return true;
@@ -236,73 +218,67 @@ bool Game::checkIfValidMove(Card card) const{
 
 
 
-void Game::colorChange(Card* card, Bot* currentBot) { 
-	card->Color = currentBot->ChooseColorToChange();
+void Game::colorChange(Card* card) {
+	card->Color = players[currentPlayer].ChooseColorToChange();
 }
 
 void Game::DrawCard()
 {
-	if (!players[currentPlayer]->hasDrawn) {
-		if (deck->deck.empty()) {
+	if (!players[currentPlayer].hasDrawn) {
+		if (deck.deck.empty()) {
 			outOfCards();
 		}
-			players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
-			players[currentPlayer]->hasDrawn = true;
+		players[currentPlayer].playerHand.AddCard(deck.PopTopCard());
+		players[currentPlayer].hasDrawn = true;
 	}
 }
 
 void Game::PlayerUNOdraw()
 {
 	for (int i = 0; i < 2; ++i) {
-		if (deck->deck.empty()) {
+		if (deck.deck.empty()) {
 			outOfCards();
 		}
-		players[0]->playerHand->AddCard(deck->PopTopCard());
+		players[0].playerHand.AddCard(deck.PopTopCard());
 	}
 }
 
 void Game::drawSumDraw()
 {
 	for (UINT i = 0; i < drawSum; ++i) {
-		if (deck->deck.empty()) {
+		if (deck.deck.empty()) {
 			outOfCards();
 		}
-		players[currentPlayer]->playerHand->AddCard(deck->PopTopCard());
+		players[currentPlayer].playerHand.AddCard(deck.PopTopCard());
 	}
 	drawSum = 0;
 }
 
 void Game::outOfCards()
 {
-	deck->~Deck();
-	deck = new Deck(playedCards->resetDeck());
+	deck.Reset(playedCards.resetDeck());
 }
 
-Bot* Game::getCurrentBot()
-{
-	return dynamic_cast<Bot*>(players[currentPlayer].get());
-	
-}
 
 bool Game::WinCheck() const
 {
-	return players[currentPlayer]->playerHand->hand.empty();
+	return players[currentPlayer].playerHand.hand.empty();
 }
 
-bool Game::BotMove(UINT i, Bot* currentBot)
+bool Game::BotMove(UINT i)
 {
-	Card card = currentBot->PlayerTurn(i);
+	Card card = players[currentPlayer].PlayerTurn(i);
 	switch (card.getType()) {
 	case 10: {
 		if (playerCount == 2) {
-			currentBot->playerHand->RemoveCard(i);
-			playedCards->playerTurn(card);
+			players[currentPlayer].playerHand.RemoveCard(i);
+			playedCards.playerTurn(card);
 			if (WinCheck()) return true;
 
 		}
 		else {
-			currentBot->playerHand->RemoveCard(i);
-			playedCards->playerTurn(card);
+			players[currentPlayer].playerHand.RemoveCard(i);
+			playedCards.playerTurn(card);
 			if (WinCheck()) return true;
 			nextPlayer();
 			nextPlayer();
@@ -311,15 +287,15 @@ bool Game::BotMove(UINT i, Bot* currentBot)
 	}
 	case 11: {
 		if (playerCount == 2) {
-			currentBot->playerHand->RemoveCard(i);
-			playedCards->playerTurn(card);
+			players[currentPlayer].playerHand.RemoveCard(i);
+			playedCards.playerTurn(card);
 			if (WinCheck()) return true;
 
 		}
 		else {
 			turnOrder = -turnOrder;
-			currentBot->playerHand->RemoveCard(i);
-			playedCards->playerTurn(card);
+			players[currentPlayer].playerHand.RemoveCard(i);
+			playedCards.playerTurn(card);
 			if (WinCheck()) return true;
 			nextPlayer();
 		}
@@ -327,31 +303,31 @@ bool Game::BotMove(UINT i, Bot* currentBot)
 	}
 	case 12: {
 		drawSum += 2;
-		currentBot->playerHand->RemoveCard(i);
-		playedCards->playerTurn(card);
+		players[currentPlayer].playerHand.RemoveCard(i);
+		playedCards.playerTurn(card);
 		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}
 	case 13: {
-		colorChange(&card, currentBot);
-		currentBot->playerHand->RemoveCard(i);
-		playedCards->playerTurn(card);
+		colorChange(&card);
+		players[currentPlayer].playerHand.RemoveCard(i);
+		playedCards.playerTurn(card);
 		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}
 	case 14: {
 		drawSum += 4;
-		colorChange(&card, currentBot);
-		currentBot->playerHand->RemoveCard(i);
-		playedCards->playerTurn(card);
+		colorChange(&card);
+		players[currentPlayer].playerHand.RemoveCard(i);
+		playedCards.playerTurn(card);
 		if (WinCheck()) return true;
 		nextPlayer();
 		break;
 	}default:
-		currentBot->playerHand->RemoveCard(i);
-		playedCards->playerTurn(card);
+		players[currentPlayer].playerHand.RemoveCard(i);
+		playedCards.playerTurn(card);
 		if (WinCheck()) return true;
 		nextPlayer();
 		break;
@@ -362,20 +338,12 @@ bool Game::BotMove(UINT i, Bot* currentBot)
 void Game::resetGame(const bool rndWin)
 {
 	currentPlayer = 0;
-	deck->~Deck();
-	deck = new Deck();
-	playedCards->~PlayedCards();
-	playedCards = new PlayedCards(deck->PopTopNSCard());
+	deck.newGame();
+	playedCards.newGame(deck.PopTopNSCard());
 	for (int i = 0; i < playerCount; ++i) {
-		players[i]->playerHand->~Hand();
-	}
-	for (UINT i = 0; i < playerCount; ++i) {
-		players[i]->playerHand=new Hand(deck->GetStartingHand());
+		players[i].newGame(deck.GetStartingHand());
 	}
 	if (!rndWin) {
-		types type = (types)scBoard->GetType();
-		int reqPoints = scBoard->GetReqPoints();
-		scBoard->~Scoreboard();
-		scBoard = new Scoreboard(playerCount, type, reqPoints);
+		scBoard.resetScoreboard();
 	}
 }
