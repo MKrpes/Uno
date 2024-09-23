@@ -5,6 +5,7 @@
 #include "GameSettingsDlg.h"
 
 
+
 // GameSettings dialog
 
 IMPLEMENT_DYNAMIC(GameSettings, CDialogEx)
@@ -32,10 +33,16 @@ void GameSettings::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK1, FullscreenCheck);
 
 	DDX_Control(pDX, IDC_COMBO1, VictoryConditionSelect);
-	VictoryConditionSelect.AddString("Single match");
-	VictoryConditionSelect.AddString("Match wins");
-	VictoryConditionSelect.AddString("Points");
-	VictoryConditionSelect.SelectString(0, "None");
+	char SingleMatch[16];
+	char MatchWins[16];
+	char Points[16];
+	::LoadString(0, IDS_GSD_MAT_SET_SM, SingleMatch, sizeof SingleMatch);
+	::LoadString(0, IDS_GSD_MAT_SET_MW, MatchWins, sizeof MatchWins);
+	::LoadString(0, IDS_GSD_MAT_SET_POI, Points, sizeof Points);
+	VictoryConditionSelect.AddString(SingleMatch);
+	VictoryConditionSelect.AddString(MatchWins);
+	VictoryConditionSelect.AddString(Points);
+	VictoryConditionSelect.SelectString(0, SingleMatch);
 
 	DDX_Control(pDX, IDC_EDIT2, VictoryConditionEdit);
 	DDX_Control(pDX, IDC_STATIC3, VictoryConditionText);
@@ -62,6 +69,10 @@ void GameSettings::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult)
 
 void GameSettings::OnCbnSelchangeCombo1()
 {
+	char MWDesc[64];
+	::LoadString(0, 104, MWDesc, sizeof MWDesc);
+	char PoiDesc[64];
+	::LoadString(0, 105, PoiDesc, sizeof PoiDesc);
 	switch (VictoryConditionSelect.GetCurSel()) {
 	case 0:
 		VictoryConditionEdit.SetWindowTextA("");
@@ -71,13 +82,15 @@ void GameSettings::OnCbnSelchangeCombo1()
 		break;
 	case 1:
 		VictoryConditionEdit.SetWindowTextA("");
-		VictoryConditionText.SetWindowTextA("Match wins needed for game victory (default: 5)");
+		
+
+		VictoryConditionText.SetWindowTextA(MWDesc);
 		VictoryConditionEdit.ShowWindow(1);
 		VictoryConditionText.ShowWindow(1);
 		break;
 	case 2:
 		VictoryConditionEdit.SetWindowTextA("");
-		VictoryConditionText.SetWindowTextA("Points needed for game victory (default: 500)");
+		VictoryConditionText.SetWindowTextA(PoiDesc);
 		VictoryConditionEdit.ShowWindow(1);
 		VictoryConditionText.ShowWindow(1);
 		break;

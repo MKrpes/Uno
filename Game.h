@@ -4,7 +4,6 @@
 #include"Player.h"
 #include"Deck.h"
 #include"PlayedCards.h"
-#include"Bot.h"
 #include"SavedGameSettings.h"
 #include"Scoreboard.h"
 #include"Card.h"

@@ -2,6 +2,7 @@
 #include "afxdialogex.h"
 #include "Uno.h"
 #include "SavedGameSettings.h"
+#include"resource.h"
 #include<string>
 
 // GameSettings dialog

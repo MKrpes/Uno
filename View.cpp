@@ -99,14 +99,22 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     if (CView::OnCreate(lpCreateStruct) == -1)
         return -1;
 
+    char Draw[8];
+    ::LoadString(0, 106, Draw, sizeof Draw);
 
-    DrawButton.Create(_T("Draw"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+    char Skip[8];
+    ::LoadString(0, 107, Skip, sizeof Skip);
+
+    char Uno[8];
+    ::LoadString(0, 108, Uno, sizeof Uno);
+
+    DrawButton.Create(Draw, WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         CRect(0, 265, 100, 295), this, 1001);
 
-    SkipButton.Create(_T("Skip"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+    SkipButton.Create(Skip, WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         CRect(0, 225, 100, 255), this, 1002);
 
-    UnoButton.Create(_T("Uno"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+    UnoButton.Create(Uno, WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         CRect(0, 315, 100, 345), this, 1003);
 
     // Force a redraw to display the loaded image
@@ -191,7 +199,9 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             }
         }
         if (!isUno && game.getPlayerhand().size() <= 1) {
-            AfxMessageBox(_T("Uno not called"));
+            char UnoWarning[16];
+            ::LoadString(0, 108, UnoWarning, sizeof UnoWarning);
+            AfxMessageBox(UnoWarning);
             game.PlayerUNOdraw();
             Invalidate();
             UpdateWindow();
@@ -312,12 +322,15 @@ void View::GetPreviewRect(CRect& previewRect) const
 
 void View::UpdateListBox()
 {
+    char Player[32];
+    ::LoadString(0, 110, Player, sizeof Player);
     playerListBox.ResetContent();
     CString str;
-    str.Format(_T("You: %u cards, %d points"), game.getPlayerhand().size(), game.scBoard.GetPlayerPoints(0));
+    str.Format(Player, game.getPlayerhand().size(), game.scBoard.GetPlayerPoints(0));
     playerListBox.AddString(str);
     for (UINT i = 1; i < game.playerCount; ++i) {
-        str.Format(_T("%u. rival: %u cards, %d points"), i, game.players[i].playerHand.hand.size(), game.scBoard.GetPlayerPoints(i));
+        ::LoadString(0, 111, Player, sizeof Player);
+        str.Format(Player, i, game.players[i].playerHand.hand.size(), game.scBoard.GetPlayerPoints(i));
         playerListBox.AddString(str);
     }
     playerListBox.SetCurSel(game.currentPlayer);
