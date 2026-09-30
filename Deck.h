@@ -16,7 +16,6 @@ public:
 	std::vector<Card> GetStartingHand();
 
 	Deck(const Deck& other);
-	Deck(const std::vector<Card> other);
 	~Deck();
 	void Shuffle();
 	void Reset(const std::vector<Card> other);

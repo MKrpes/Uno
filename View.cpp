@@ -200,7 +200,7 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
         }
         if (!isUno && game.getPlayerhand().size() <= 1) {
             char UnoWarning[16];
-            ::LoadString(0, 108, UnoWarning, sizeof UnoWarning);
+            ::LoadString(0, 109, UnoWarning, sizeof UnoWarning);
             AfxMessageBox(UnoWarning);
             game.PlayerUNOdraw();
             Invalidate();

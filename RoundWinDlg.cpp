@@ -45,7 +45,7 @@ void RoundWinDlg::getWinner(int playerID, bool roundWin)
 			str.Format("You have won this round! Continue?");
 		}
 		else {
-			str.Format("You have won the game! Continue?");
+			str.Format("You have won the game! Reset?");
 		}
 	}
 	else {
@@ -53,10 +53,9 @@ void RoundWinDlg::getWinner(int playerID, bool roundWin)
 			str.Format("Opponent %u has won this round! Continue?",playerID);
 		}
 		else {
-			str.Format("Opponent %u has won the game! Continue?",playerID);
+			str.Format("Opponent %u has won the game! Reset?",playerID);
 		}
 	}
-	//winText.SetWindowTextA(szTemp);
 }
 
 

@@ -6,8 +6,8 @@ public:
 	int playerCount=2;
 	bool isFullscreen = false;
 	types GameType = none;
-	int winsNeeded = 5;
-	int pointsNeeded = 500;
+	int winsNeeded=5;
+	int pointsNeeded=500;
 	
 	~SavedGameSettings() {};
 };

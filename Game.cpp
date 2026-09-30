@@ -2,9 +2,25 @@
 #include "Game.h"
 
 Game::Game(SavedGameSettings& gameSet) : deck(), playedCards(deck.PopTopNSCard()),
-playerCount(gameSet.playerCount), scBoard(playerCount,gameSet.GameType,gameSet.pointsNeeded)
+playerCount(gameSet.playerCount)
 
 {
+	switch (gameSet.GameType) {
+	case 0:
+	{
+		scBoard = Scoreboard(playerCount, gameSet.GameType,0);
+		break;
+	}
+	case 1:
+	{
+		scBoard=Scoreboard(playerCount, gameSet.GameType, gameSet.winsNeeded);
+		break;
+	}
+	case 2: {
+		scBoard = Scoreboard(playerCount, gameSet.GameType, gameSet.pointsNeeded);
+		break;
+	}
+	}
 	for (UINT i = 0; i < playerCount; ++i) {
 		players.push_back(Player(deck.GetStartingHand()));
 	}

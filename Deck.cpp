@@ -32,15 +32,6 @@ Deck::Deck() {
 	}
 	Shuffle();
 }
-Deck::Deck(const std::vector<Card> other) {
-	deck = other;
-	for (Card card : deck) {
-		if (card.getType() == DrawFour || card.getType() == ColorChange) {
-			card.Color = Wildcard;
-		}
-	}
-	Shuffle();
-}
 
 Deck::~Deck() {
 }
@@ -53,16 +44,17 @@ void Deck::Shuffle() {
 
 void Deck::Reset(const std::vector<Card> other)
 {
-	deck = other;
-	for (Card card : deck) {
+	for (Card card : other) {
 		if (card.getType() == DrawFour || card.getType() == ColorChange) {
 			card.Color = Wildcard;
 		}
+		deck.push_back(card);
 	}
 	Shuffle();
 }
 
 void Deck::newGame(){
+	deck.clear();
 	//generates cards that appear only once (number 0 cards)
 	for (int i = Red; i < Wildcard; ++i) {
 		deck.push_back(Card((CardColors)i, ZERO));
