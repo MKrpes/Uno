@@ -223,7 +223,7 @@ bool Game::processMove() {
 }
 
 bool Game::checkIfValidMove(const Card card) {
-	if (playedCards.getLast().getColor() == card.getColor() ||
+	if ((playedCards.getLast().getColor() == card.getColor())&&drawSum==0 ||
 		playedCards.getLast().getType() == card.getType() ||
 		card.getColor() == Wildcard) {
 

@@ -103,4 +103,3 @@ CardColors Player::ChooseColorToChange()
 	}
 	return cc;
 }
-
