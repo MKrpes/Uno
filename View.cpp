@@ -14,7 +14,9 @@ BEGIN_MESSAGE_MAP(View, CView)
     ON_WM_TIMER()
 END_MESSAGE_MAP()
 
-View::View(Game gm) : game(gm){
+View::View(Game& gm)
+{
+    game = &gm;
 }
 
 void View::OnInitialUpdate()
@@ -38,7 +40,7 @@ BOOL View::LoadImagesFromResource()
         delete img;
     }
     hand_bitmaps.clear();
-    for (Card card : game.getPlayerhand()) {
+    for (Card card : game->getPlayerhand()) {
         hand_bitmaps.push_back(Gdiplus::Bitmap::FromResource(hModule, MAKEINTRESOURCEW(card.Color*100+card.Type)));
     }
 
@@ -130,17 +132,17 @@ afx_msg int View::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 
 void View::OnDrawButtonClick()
 {
-    if (game.currentPlayer == 0 && !game.players[0].hasDrawn && game.drawSum == 0)
+    if (game->currentPlayer == 0 && !game->players[0].hasDrawn && game->drawSum == 0)
     {
-        game.DrawCard();
+        game->DrawCard();
         UpdateListBox();
 
         Invalidate();
         UpdateWindow();
     }
-    else if (game.currentPlayer == 0 && !game.players[0].hasDrawn && game.drawSum != 0)
+    else if (game->currentPlayer == 0 && !game->players[0].hasDrawn && game->drawSum != 0)
     {
-        game.drawSumDraw();
+        game->drawSumDraw();
         UpdateListBox();
 
         Invalidate();
@@ -151,9 +153,9 @@ void View::OnDrawButtonClick()
 
 void View::OnSkipButtonClick()
 {
-    if (game.currentPlayer == 0 && game.players[0].hasDrawn)
+    if (game->currentPlayer == 0 && game->players[0].hasDrawn)
     {
-        game.PlayerMove(-1);
+        game->PlayerMove(-1);
         ::SetTimer(*this, MyTimerId, 1000, NULL);
 
     }
@@ -169,15 +171,15 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
 
     if (m_hoveredImageIndex > -1 &&
         m_hoveredImageIndex < hand_bitmaps.size() &&
-        game.currentPlayer == 0)
+        game->currentPlayer == 0)
     {        
-        switch (game.validatePlayerMove(m_hoveredImageIndex)) {
+        switch (game->validatePlayerMove(m_hoveredImageIndex)) {
         case -1: {
             break; //invalid move, nothing happens
         }
         case 0: {
-            if (game.PlayerMove(m_hoveredImageIndex)) {
-                ShowWinScreen(game.currentPlayer, game.UpdatePoints());
+            if (game->PlayerMove(m_hoveredImageIndex)) {
+                ShowWinScreen(game->currentPlayer, game->UpdatePoints());
                 break;
             }
             m_hoveredImageIndex = -1;
@@ -188,8 +190,8 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             ChooseColorDlg chooseDlg;
             if (chooseDlg.DoModal() == IDOK) {
                 int color = chooseDlg.getChosenColor();
-                    if (game.PlayerMove(m_hoveredImageIndex, color)) {
-                ShowWinScreen(game.currentPlayer, game.UpdatePoints());
+                    if (game->PlayerMove(m_hoveredImageIndex, color)) {
+                ShowWinScreen(game->currentPlayer, game->UpdatePoints());
                 break;
             }
                 m_hoveredImageIndex = -1;
@@ -198,16 +200,16 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
                 }     
             }
         }
-        if (!isUno && game.getPlayerhand().size() <= 1) {
+        if (!isUno && game->getPlayerhand().size() <= 1) {
             char UnoWarning[16];
             ::LoadString(0, 109, UnoWarning, sizeof UnoWarning);
             AfxMessageBox(UnoWarning);
-            game.PlayerUNOdraw();
+            game->PlayerUNOdraw();
             Invalidate();
             UpdateWindow();
         }
         isUno = false;
-        if (game.currentPlayer != 0) {
+        if (game->currentPlayer != 0) {
             ::SetTimer(*this, MyTimerId, 1000, NULL);
         }
     }
@@ -260,7 +262,7 @@ void View::OnDraw(CDC* pDC)
 
     // Use GDI+ to draw into the memory DC
     Graphics graphics(memoryDC.GetSafeHdc());
-    ShowPlayedCard(&memoryDC, game.playedCards.getLast());
+    ShowPlayedCard(&memoryDC, game->playedCards.getLast());
     if (!hand_bitmaps.empty())
     {
         ShowHand(&memoryDC);
@@ -326,28 +328,28 @@ void View::UpdateListBox()
     ::LoadString(0, 110, Player, sizeof Player);
     playerListBox.ResetContent();
     CString str;
-    str.Format(Player, game.getPlayerhand().size(), game.scBoard.GetPlayerPoints(0));
+    str.Format(Player, game->getPlayerhand().size(), game->scBoard.GetPlayerPoints(0));
     playerListBox.AddString(str);
-    for (UINT i = 1; i < game.playerCount; ++i) {
+    for (UINT i = 1; i < game->playerCount; ++i) {
         ::LoadString(0, 111, Player, sizeof Player);
-        str.Format(Player, i, game.players[i].playerHand.hand.size(), game.scBoard.GetPlayerPoints(i));
+        str.Format(Player, i, game->players[i].playerHand.hand.size(), game->scBoard.GetPlayerPoints(i));
         playerListBox.AddString(str);
     }
-    playerListBox.SetCurSel(game.currentPlayer);
+    playerListBox.SetCurSel(game->currentPlayer);
 
 }
 
 void View::ShowHand(CDC* pDC)
 {
-    if (!game.getPlayerhand().empty())
+    if (!game->getPlayerhand().empty())
     {
         LoadImagesFromResource();
         std::vector<UINT> cardsToEnlarge;
-        if (game.drawSum == 0) {
-            cardsToEnlarge = game.players[0].playerHand.CheckForAvailableCards(game.playedCards.getLast());
+        if (game->drawSum == 0) {
+            cardsToEnlarge = game->players[0].playerHand.CheckForAvailableCards(game->playedCards.getLast());
         }
         else {
-            cardsToEnlarge = game.players[0].playerHand.CheckForStackingCards(game.playedCards.getLast());
+            cardsToEnlarge = game->players[0].playerHand.CheckForStackingCards(game->playedCards.getLast());
         }
         m_imageRects.clear();
 
@@ -371,7 +373,7 @@ void View::ShowHand(CDC* pDC)
                 if (pImage->GetWidth() / 2 < imageWidth) { //prevents cards from taking the entire screen
                     imageWidth = pImage->GetWidth() / 2;
                 }
-                if (game.currentPlayer == 0) {
+                if (game->currentPlayer == 0) {
                     for (UINT j : cardsToEnlarge)
                     {
                         if (j == i) {
@@ -433,8 +435,7 @@ void View::ShowWinScreen(int player, const bool rndWin)
 {
     RoundWinDlg rwDlg(player,rndWin,nullptr);
     if (rwDlg.DoModal() == IDOK) {
-
-        game.resetGame(rndWin);
+        game->resetGame(rndWin);
         Invalidate();
         UpdateWindow();
         UpdateListBox();
@@ -443,16 +444,15 @@ void View::ShowWinScreen(int player, const bool rndWin)
     else {
         AfxGetMainWnd()->PostMessage(WM_CLOSE);
     }
-
 }
 
 void View::OnTimer(UINT_PTR timerId)
 {
-    if(game.currentPlayer != 0) {
+    if(game->currentPlayer != 0) {
 
-        if (game.processMove()) {
+        if (game->processMove()) {
             KillTimer(timerId);
-            ShowWinScreen(game.currentPlayer, game.UpdatePoints());
+            ShowWinScreen(game->currentPlayer, game->UpdatePoints());
             UpdateListBox();
             Invalidate();
             UpdateWindow();

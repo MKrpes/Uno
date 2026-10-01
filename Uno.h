@@ -23,6 +23,7 @@ using namespace Gdiplus;
 class CUnoGameApp : public CWinApp
 {
 public:
+	std::unique_ptr<Game> game;
 	CUnoGameApp() noexcept;
 	ULONG_PTR m_gdiplusToken;
 	SavedGameSettings gameSet;

@@ -23,7 +23,7 @@ public:
 
 // Overrides
 public:
-	CMainFrame(Game gm);
+	CMainFrame(Game& gm);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual void OnGetMinMaxInfo(MINMAXINFO* lpMMI);

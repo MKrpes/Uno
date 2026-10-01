@@ -15,10 +15,10 @@ class View :
 {
     DECLARE_DYNCREATE(View)
     public:
-        Game game;
+        Game* game = nullptr;
         virtual void OnDraw(CDC* pDC);
         
-        View(Game game);
+        View(Game& game);
         View() {};
         ~View() {};
         

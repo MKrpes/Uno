@@ -51,7 +51,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 //CMainFrame::CMainFrame(Game gm) : m_wndView(gm){
 //}
-CMainFrame::CMainFrame(Game gm){
+CMainFrame::CMainFrame(Game& gm){
 	m_wndView = new View(gm);
 }
 

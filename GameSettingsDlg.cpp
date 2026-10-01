@@ -17,7 +17,6 @@ GameSettings::GameSettings(SavedGameSettings* gmSet, CWnd* pParent /*=nullptr*/)
 	settings = gmSet;
 }
 
-
 GameSettings::~GameSettings()
 {
 }
@@ -96,7 +95,6 @@ void GameSettings::OnCbnSelchangeCombo1()
 		break;
 	}
 }
-
 
 void GameSettings::OnBnClickedOk()
 {
