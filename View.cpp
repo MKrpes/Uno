@@ -47,7 +47,7 @@ BOOL View::LoadImagesFromResource()
     return TRUE;
 }
 
-void View::OnMouseMove(UINT nFlags, CPoint point) 
+afx_msg void View::OnMouseMove(UINT nFlags, CPoint point)
 {
     bool hoverChanged = false;
     CRect hand;
@@ -153,9 +153,10 @@ void View::OnDrawButtonClick()
 
 void View::OnSkipButtonClick()
 {
-    if (game->currentPlayer == 0 && game->players[0].hasDrawn)
+    if (game->currentPlayer == 0 && game->players[0].hasDrawn && game->players[0].playerHand.CheckForAvailableCards(game->playedCards.getLast()).empty())
     {
         game->PlayerMove(-1);
+        UpdateListBox();
         ::SetTimer(*this, MyTimerId, 1000, NULL);
 
     }
@@ -205,11 +206,13 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             ::LoadString(0, 109, UnoWarning, sizeof UnoWarning);
             AfxMessageBox(UnoWarning);
             game->PlayerUNOdraw();
+            UpdateListBox();
             Invalidate();
             UpdateWindow();
         }
         isUno = false;
         if (game->currentPlayer != 0) {
+            UpdateListBox();
             ::SetTimer(*this, MyTimerId, 1000, NULL);
         }
     }
@@ -242,7 +245,6 @@ void View::ShowPlayedCard(CDC* pDC,const Card card) const {
 
 void View::OnDraw(CDC* pDC)
 {
-
     // Create a memory DC to perform double buffering
     CRect clientRect;
     GetClientRect(&clientRect);
@@ -293,7 +295,7 @@ void View::ShowPreview(CDC* pDC, Gdiplus::Bitmap* pImage)const
         GetPreviewRect(clientRect);
 
 
-        int previewWidth = clientRect.Width();  //!!!test!!! change later
+        int previewWidth = clientRect.Width(); 
         int previewHeight = clientRect.Height();
 
         int xOffset = clientRect.right - previewWidth;  // Right side of the window
@@ -336,7 +338,6 @@ void View::UpdateListBox()
         playerListBox.AddString(str);
     }
     playerListBox.SetCurSel(game->currentPlayer);
-
 }
 
 void View::ShowHand(CDC* pDC)
@@ -398,7 +399,7 @@ void View::ShowHand(CDC* pDC)
                 // Increment the horizontal offset for the next image
                 xOffset += imageWidth;  // Add some padding between images
             }
-            int previewWidth = clientRect.Width();  //!!!test!!! change later
+            int previewWidth = clientRect.Width();  
             int previewHeight = clientRect.Height();
 
             int xOffset = clientRect.right - previewWidth - 20;  // Right side of the window

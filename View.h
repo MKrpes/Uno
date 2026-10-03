@@ -15,7 +15,7 @@ class View :
 {
     DECLARE_DYNCREATE(View)
     public:
-        Game* game = nullptr;
+        Game* game;
         virtual void OnDraw(CDC* pDC);
         
         View(Game& game);

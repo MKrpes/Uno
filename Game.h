@@ -44,7 +44,7 @@ private:
 	void drawSumDraw();
 	void nextPlayer();
 	void outOfCards();
-	
+
 	bool WinCheck() const;
 	void resetGame(const bool rndWin);
 

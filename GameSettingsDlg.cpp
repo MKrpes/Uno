@@ -28,7 +28,6 @@ void GameSettings::DoDataExchange(CDataExchange* pDX)
 	PlayerCountSlider.SetRangeMin(2);
 	PlayerCountSlider.SetRangeMax(10);
 	DDX_Control(pDX, IDC_EDIT1, PlayerCountEdit);
-
 	DDX_Control(pDX, IDC_CHECK1, FullscreenCheck);
 
 	DDX_Control(pDX, IDC_COMBO1, VictoryConditionSelect);
@@ -42,7 +41,6 @@ void GameSettings::DoDataExchange(CDataExchange* pDX)
 	VictoryConditionSelect.AddString(MatchWins);
 	VictoryConditionSelect.AddString(Points);
 	VictoryConditionSelect.SelectString(0, SingleMatch);
-
 	DDX_Control(pDX, IDC_EDIT2, VictoryConditionEdit);
 	DDX_Control(pDX, IDC_STATIC3, VictoryConditionText);
 }

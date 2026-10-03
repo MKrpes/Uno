@@ -359,6 +359,7 @@ void Game::resetGame(const bool rndWin)
 	for (int i = 0; i < playerCount; ++i) {
 		players[i].newGame(deck.GetStartingHand());
 	}
+	players[0].playerHand.Sort();
 	if (!rndWin) {
 		scBoard.resetScoreboard();
 	}

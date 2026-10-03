@@ -99,7 +99,6 @@ BOOL CUnoGameApp::InitInstance()
 
 int CUnoGameApp::ExitInstance()
 {
-	//TODO: handle additional resources you may have added
 	GdiplusShutdown(m_gdiplusToken);
 	AfxOleTerm(FALSE);
 

@@ -27,7 +27,6 @@ END_MESSAGE_MAP()
 
 CMainFrame::CMainFrame() noexcept
 {
-	// TODO: add member initialization code here
 }
 
 CMainFrame::~CMainFrame()
@@ -60,8 +59,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if( !CFrameWnd::PreCreateWindow(cs) )
 		return FALSE;
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
 
 	cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
 	cs.lpszClass = AfxRegisterWndClass(0);
