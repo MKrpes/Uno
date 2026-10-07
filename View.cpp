@@ -176,15 +176,18 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
     {        
         switch (game->validatePlayerMove(m_hoveredImageIndex)) {
         case -1: {
-            break; //invalid move, nothing happens
+            return; //invalid move, nothing happens
         }
         case 0: {
             if (game->PlayerMove(m_hoveredImageIndex)) {
                 ShowWinScreen(game->currentPlayer, game->UpdatePoints());
                 break;
             }
-            m_hoveredImageIndex = -1;
-            Invalidate();
+            
+            else {
+                m_hoveredImageIndex = -1;
+                Invalidate();
+            }
             break;
             }
         case 1: {
@@ -195,8 +198,11 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
                 ShowWinScreen(game->currentPlayer, game->UpdatePoints());
                 break;
             }
-                m_hoveredImageIndex = -1;
-                Invalidate();
+                   
+                    else {
+                        m_hoveredImageIndex = -1;
+                        Invalidate();
+                    }
                 break;
                 }     
             }
@@ -210,8 +216,9 @@ afx_msg void View::OnLButtonDown(UINT nFlags, CPoint point) {
             Invalidate();
             UpdateWindow();
         }
-        isUno = false;
+
         if (game->currentPlayer != 0) {
+            isUno = false;
             UpdateListBox();
             ::SetTimer(*this, MyTimerId, 1000, NULL);
         }

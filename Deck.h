@@ -18,7 +18,7 @@ public:
 	Deck(const Deck& other);
 	~Deck();
 	void Shuffle();
-	void Reset(const std::vector<Card> other);
+	void Reset(std::vector<Card>& other);
 	void newGame();
 };
 

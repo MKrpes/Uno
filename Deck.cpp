@@ -3,7 +3,7 @@
 
 
 Deck::Deck(const Deck& other) : deck(other.deck) {
-	for (Card card : deck) {
+	for (Card& card : deck) {
 		if (card.getType() == DrawFour || card.getType() == ColorChange) {
 			card.Color = Wildcard;
 		}
@@ -42,9 +42,9 @@ void Deck::Shuffle() {
 	std::shuffle(deck.begin(), deck.end(), g);
 }
 
-void Deck::Reset(const std::vector<Card> other)
+void Deck::Reset(std::vector<Card>& other)
 {
-	for (Card card : other) {
+	for (Card& card : other) {
 		if (card.getType() == DrawFour || card.getType() == ColorChange) {
 			card.Color = Wildcard;
 		}
