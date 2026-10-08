@@ -1,8 +1,10 @@
 MFC aplikacija - kartaška igra Uno. 
+
 Igra se protiv 1 do 9 računalnih igrača.
 Prije početka igre korisnik odabire broj igrača i trajanje igre, odabiri su jedna partija, do određenog broja pobjeda ili tradicionalno igranje na bodove.
 
 U igri, igrači, njihov broj karata te bodovi su prikazani u gornjem lijevom kutu. 
+
 Gumb Uno koristi se za prijavu stanja UNO prije odigravanja pretposljednje karte. 
 Gumb Skip omogućuje preskakanje poteza kada ne postoji valjan potez. 
 Gumb Draw koristi se za izvlačenje jedne ili više karata iz špila, uključujući situacije kada je prethodni igrač odigrao kartu +2 ili +4
